@@ -1,5 +1,18 @@
 import React, { useState, useEffect } from 'react';
 
+
+  // const listingData = async () => {
+  //   let responses = []
+  //   for (let i=1; i < 15; i++) {
+  //     axios.get('https://mlb22.theshow.com/apis/listings.json?&page=1' + (i)).then(res => {
+  //       responses.push(res.data.listings)
+  //       setResData(responses.flat(1))
+  //     })
+  //   }
+  // }
+
+  // https://mlb22.theshow.com/apis/listings.json?&page=1
+
 export const getStaticProps = async () => {
   const results = []
   for (let i=1; i < 8; i++) {
@@ -11,7 +24,7 @@ export const getStaticProps = async () => {
   }
   return {
     props: {
-      cardData: (results.flat(1).filter((r) => {
+      profitOnly: (results.flat(1).filter((r) => {
         const commissionSellPrice = r.best_sell_price - (r.best_sell_price * .10)
         const buySellDifference = commissionSellPrice - r.best_buy_price
         return buySellDifference > 1000 && r.best_buy_price !== 0
@@ -19,13 +32,13 @@ export const getStaticProps = async () => {
         const commissionSellPrice = p.best_sell_price - (p.best_sell_price * .10)
         const buySellDifference = commissionSellPrice - p.best_buy_price
         return ({...p, buySellDifference})
-      }).sort((a, b) => b.buySellDifference - a.buySellDifference)),
+      }).sort((a, b) => b.buySellDifference - a.buySellDifference))
     }  
   }
 }
 
-export default function Home({ cardData}) {
-  const [resData, setResData] = useState(cardData)
+export default function Home({profitOnly}) {
+  const [resData, setResData] = useState(profitOnly)
   const [buyNowPrice, setBuyNowPrice] = useState({})
   const [sellNowPrice, setSellNowPrice] = useState({})
   const [form, setForm] = useState({});
@@ -253,7 +266,7 @@ export default function Home({ cardData}) {
       <div className='refresh-button-container'>
       {refreshTime === true && <button className="refresh-button" onClick={e => window.location.reload()}>REFRESH</button>}
       </div>
-    {resData?.map((r,i) =>
+    {profitOnly?.map((r,i) =>
       <div className='flex-container' key={i}>
         <img alt="baseball player card" className="card-image" src={r?.item.img}></img>
         <div className='card-info'>
