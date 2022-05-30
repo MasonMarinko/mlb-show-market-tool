@@ -1,17 +1,4 @@
-import React, { useState, useEffect } from 'react';
-
-
-  // const listingData = async () => {
-  //   let responses = []
-  //   for (let i=1; i < 15; i++) {
-  //     axios.get('https://mlb22.theshow.com/apis/listings.json?&page=1' + (i)).then(res => {
-  //       responses.push(res.data.listings)
-  //       setResData(responses.flat(1))
-  //     })
-  //   }
-  // }
-
-  // https://mlb22.theshow.com/apis/listings.json?&page=1
+import React, { useState } from 'react';
 
 export const getStaticProps = async () => {
   const results = []
