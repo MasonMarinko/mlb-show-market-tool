@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-export const getStaticProps = async () => {
+export const getServerSideProps = async () => {
   const results = []
   for (let i=1; i < 8; i++) {
     const res = await fetch(
