@@ -9,6 +9,7 @@ specifiers:
   react-dom: 18.1.0
 
 dependencies:
+  axios: 0.27.2
   next: 12.1.6_ef5jwxihqo6n7gxfmzogljlgcm
   react: 18.1.0
   react-dom: 18.1.0_react@18.1.0
