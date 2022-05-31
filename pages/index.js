@@ -33,9 +33,7 @@ export default function Home({profitOnly}) {
   const [isPurchased, setIsPurchased] = useState(false);
   const [isSold, setIsSold] = useState(false);
   const [refreshTime, setRefreshTime] = useState(false);
-
-  console.log(profitOnly)
-
+  
   setTimeout(() => {
     setRefreshTime(true);
   }, "60000")
