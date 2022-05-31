@@ -34,6 +34,8 @@ export default function Home({profitOnly}) {
   const [isSold, setIsSold] = useState(false);
   const [refreshTime, setRefreshTime] = useState(false);
 
+  console.log(profitOnly)
+
   setTimeout(() => {
     setRefreshTime(true);
   }, "60000")
@@ -258,7 +260,7 @@ export default function Home({profitOnly}) {
         <img alt="baseball player card" className="card-image" src={r?.item.img}></img>
         <div className='card-info'>
           <div className='border-bottom-cards player-name card-info-spacing'>
-            {r.listing_name}
+            {r.listing_name} ({r.item.ovr})
           </div>
           <div className='buy-sell-now-price card-info-spacing'>
             Buy Now Price: ${r.best_sell_price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
