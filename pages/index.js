@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 
 export const getServerSideProps = async () => {
   const promises = []
-  for (let i = 1; i < 8; i++) {
+  for (let i = 1; i < 82; i++) {
     const p = new Promise((resolve, reject) => {
       fetch(`https://mlb22.theshow.com/apis/listings.json?&page=${i}`)
         .then(res => res.json())
