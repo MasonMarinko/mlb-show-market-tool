@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 export const getServerSideProps = async () => {
   const promises = []
-  for (let i = 1; i < 82; i++) {
+  for (let i = 1; i < 5; i++) {
     const p = new Promise((resolve, reject) => {
       fetch(`https://mlb22.theshow.com/apis/listings.json?&page=${i}`)
         .then(res => res.json())
@@ -39,6 +39,7 @@ export default function Home({ profitOnly }) {
   const [isPurchased, setIsPurchased] = useState(false);
   const [isSold, setIsSold] = useState(false);
   const [refreshTime, setRefreshTime] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
 
   setTimeout(() => {
     setRefreshTime(true);
@@ -144,6 +145,23 @@ export default function Home({ profitOnly }) {
     setForm({})
   }
 
+  useEffect(()=> {
+    if (window.innerWidth < 768) {
+      setIsMobile(true)
+    } else if (window.innerWidth > 768) {
+      setIsMobile(false)
+    }
+
+
+    window.addEventListener('resize', ()=> {
+      if(window.innerWidth < 768) {
+        setIsMobile(true)
+      } else if (window.innerWidth > 768) {
+        setIsMobile(false)
+      }
+    })
+ }, [])
+
   const gainLossHeader = (buyPrice, sellPrice) => {
     const commissionSellPrice = buyPrice - (buyPrice * .10)
     const buySellDifference = commissionSellPrice - sellPrice
@@ -232,19 +250,21 @@ export default function Home({ profitOnly }) {
     }
   }
 
+
   return (
     <div>
       <div className="flex">
         <h1 className="main-title">Flip Calculator</h1>
         {!areStatsOpen && (
           <form className="form-styling" onSubmit={(e) => onSubmit(e)}>
-            <label>
-              <span className='input-labels'>Buy Now Price</span>
-              <input onChange={e => onFieldChange(e)} type="integer" name="Buy Now Price" />
+            <label className='buy-price'>
+              {!isMobile && <span className='input-labels'>Buy Now Price</span>}
+              <input placeholder='Buy Now Price' onChange={e => onFieldChange(e)} type="integer" name="Buy Now Price" />
             </label>
+            <br/>
             <label className='sell-price'>
-              <span className='input-labels'>Sell Now Price</span>
-              <input onChange={e => onFieldChange(e)} type="integer" name="Sell Now Price" />
+            {!isMobile && <span className='input-labels'>Sell Now Price</span>}
+              <input placeholder='Sell Now Price' onChange={e => onFieldChange(e)} type="integer" name="Sell Now Price" />
               <br />
               <br />
               <input className="submit-button" type="submit" value="Submit" />
@@ -259,7 +279,7 @@ export default function Home({ profitOnly }) {
         <div className='refresh-button-container'>
           {refreshTime === true && <button className="refresh-button" onClick={e => window.location.reload()}>REFRESH</button>}
         </div>
-        {profitOnly?.map((r, i) =>
+        {resData?.map((r, i) =>
           <div className='flex-container' key={i}>
             <img alt="baseball player card" className="card-image" src={r?.item.img}></img>
             <div className='card-info'>
