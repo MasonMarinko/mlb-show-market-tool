@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import Accordian from './accordian';
+
 
 export const getServerSideProps = async () => {
   const promises = []
@@ -45,7 +47,7 @@ export default function Home({ profitOnly }) {
     setRefreshTime(true);
   }, "60000")
 
-  const gainLossCards = (buyPrice, sellPrice) => {
+  const gainLossCards = (buyPrice, sellPrice, isOpen) => {
     const commissionSellPrice = buyPrice - (buyPrice * .10)
     const buySellDifference = commissionSellPrice - sellPrice
     const breakEven = sellPrice / (.90)
@@ -113,7 +115,6 @@ export default function Home({ profitOnly }) {
       }
     }
   }
-
 
   const onPostPurchaseSubmit = (e) => {
     e.preventDefault(e);
@@ -281,7 +282,15 @@ export default function Home({ profitOnly }) {
         </div>
         {resData?.map((r, i) =>
           <div className='flex-container' key={i}>
-            <img alt="baseball player card" className="card-image" src={r?.item.img}></img>
+            <Accordian
+            name={r.listing_name}
+            rating={r.item.ovr}
+            sellNowPrice={r.best_buy_price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+            buyNowPrice={r.best_sell_price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+            moneyMake={gainLossCards(r.best_sell_price, r.best_buy_price)}
+            img={r?.item.img}
+            />
+            {/* <img alt="baseball player card" className="card-image" src={r?.item.img}></img>
             <div className='card-info'>
               <div className='border-bottom-cards player-name card-info-spacing'>
                 {r.listing_name} ({r.item.ovr})
@@ -293,10 +302,269 @@ export default function Home({ profitOnly }) {
                 Sell Now Price: ${r.best_buy_price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
               </div>
               <div className="making-info-spacing">{gainLossCards(r.best_sell_price, r.best_buy_price)}</div>
-            </div>
+            </div> */}
           </div>
         )}
       </div>
+      <style jsx>{`
+      #root {
+        display: flex;
+        flex-wrap: wrap;
+      }
+      
+      .flex {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        width: 100%;
+      }
+      
+      .sell-price input {
+        min-width: 15rem;
+        min-height: 2rem;
+      }
+      
+      .buy-price input {
+        margin-bottom: 2rem;
+        min-width: 15rem;
+        min-height: 2rem;
+      }
+      
+      .form-styling {
+        width: 100%;
+        padding-bottom: 5rem;
+        text-align: center;
+      }
+      
+      .money-back {
+        font-size:10px;
+      }
+      
+      
+      .cart-image {
+        align-self: center;
+      }
+      
+      .card-info {
+        width: 100%;
+        text-align: center;
+      }
+      
+        .card-info-spacing {
+            margin-bottom: .7rem;
+        }
+      
+        .making-info-spacing {
+            margin-top: 1.5rem;
+        }
+      
+        .player-name {
+            font-size: 1.7rem;
+            font-weight: bold;
+        }
+        
+        .buy-sell-now-price {
+            margin-top: 1rem;
+            font-size: 1.5rem
+        }
+      
+        .border-bottom-cards {
+            border-bottom: 1px solid black;
+        }
+      
+      h2 {
+        margin-bottom:0;
+        padding-top: 1rem;
+      }
+      
+      .stats-container {
+        width: 100%;
+        padding-top: 1rem;
+        padding-bottom: 3rem;
+        text-align: center;
+      }
+        .stats-container h1 {
+            font-size: 50px;
+        }
+      
+      
+      .breakEven-price {
+        margin-top: 0;
+      }
+      
+      .making-container {
+        padding: 0;
+        margin: 0;
+        padding-top:1rem;
+        font-weight: bold;
+        font-size:30px;
+      }
+      
+      .losing-container {
+        padding: 0;
+        margin: 0;
+        font-weight: bold;
+        font-size:30px;
+        color:red;
+      }
+        .losing-container h3 {
+            color:black;
+            margin-bottom: 0;
+        }
+      
+      
+      .making-container {
+        padding: 0;
+        margin: 0;
+        font-weight: bold;
+        font-size:30px;
+        color:green;
+      }
+      
+        .making-container h3 {
+            color:black;
+            margin-bottom: 0;
+        }
+      
+      .breakEven {
+        color: green;
+      }
+      
+      .border-bottom {
+        border-bottom: 1px solid black;
+        margin: 0 600px 0 600px;
+      }
+      
+      .timer-data {
+        font-size: 20px;
+      }
+      
+      .underline {
+        text-decoration: underline;
+      }
+      
+      .useful-title {
+        margin-bottom: 40px;
+      }
+      
+      .making-container .breakEven {
+        color: black;
+      }
+      
+      .main-title {
+        min-width: 100%;
+        display: flex;
+        justify-content: center;
+        text-align: center;
+        margin-bottom: 0;
+        font-size: 34px;
+      }
+      
+      .secondary-title {
+        min-width: 100%;
+        display: flex;
+        justify-content: space-around;
+        text-align: center;
+        font-size: 18px;
+        margin: 0;
+        padding: 0 0 1rem 0;
+        color: red;
+      }
+      
+      .refresh-button-container {
+        min-width: 100%;
+        display: flex;
+        justify-content: space-around;
+        padding: 0 0 2.5rem 0;
+        margin: 0;
+      }
+      
+      .title-padding-top {
+        padding-top: 3rem;
+        margin: 0px;
+      }
+      
+      .entered-values-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      
+        .entered-values-container h3 {
+            margin-top: 0;
+            padding-right: 1rem;
+        }
+      
+        .entered-values-container p {
+            align-items: center;
+            margin: 0;
+            padding-right:4rem;
+        }
+      
+      .breakEven .breakEven-price {
+        color: green;
+        text-decoration: none;
+      }
+      
+      .refresh-button {
+        margin-top:0;
+        padding: 10px 40px 10px 40px;
+      }
+      
+      .form-styling {
+        padding-top: 15px;
+        padding-bottom: 50px;
+        border-bottom: solid 1px black;
+      }
+      
+        .submit-button {
+            padding: 10px 50px 10px 50px;
+        }
+        .input-labels {
+            padding-right: 1rem;
+        }
+      
+      .update-info-title {
+        padding-top: 75px;
+      }
+      
+      .startOver-button-container {
+        min-width: 100%;
+      }
+      
+      .startOver-button {
+        margin-top: 2rem;
+        padding: 10px 50px 10px 50px;
+      }
+      
+      .parentheses-text {
+        font-size: 1.2rem;
+        margin-top: 0px;
+        color: black;
+        margin:0 0 5px 0;
+      }
+      
+      .losing-header {
+        padding: 0;
+        margin: 0;
+        font-weight: bold;
+        font-size:30px;
+        color:red;
+      }
+      
+      .making-header {
+        padding: 0;
+        margin: 0;
+        font-weight: bold;
+        font-size:30px;
+        color:green;
+      }
+      
+      .bottom-border{
+        border-bottom: solid thin darkGray;
+        padding-top: 2rem;
+      }
+      `}</style>
     </div>
   );
 
