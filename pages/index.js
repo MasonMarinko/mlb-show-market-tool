@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Accordian from './accordian';
 
-
 export const getServerSideProps = async () => {
   const promises = []
   for (let i = 1; i < 5; i++) {
@@ -47,31 +46,13 @@ export default function Home({ profitOnly }) {
     setRefreshTime(true);
   }, "60000")
 
-  const gainLossCards = (buyPrice, sellPrice, isOpen) => {
-    const commissionSellPrice = buyPrice - (buyPrice * .10)
-    const buySellDifference = commissionSellPrice - sellPrice
-    const breakEven = sellPrice / (.90)
+  const breakEven = (bestBuyPrice) => {
+    return bestBuyPrice/(.90)
+  }
 
-    if (Math.sign(buySellDifference) === -1) {
-      return (
-        <div className="losing-container">
-          {"Losing: " + '$' + Math.abs(buySellDifference).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-        </div>
-      )
-    } else {
-      return (
-        <div>
-          <p className="making-container">
-            {"Making: " + '$' + Math.abs(buySellDifference).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-          </p>
-          <div className="bottom-border"></div>
-          <p>
-            Break Even Price
-          </p>
-          <p className="breakEven">Based off Current Prices <br /> DO NOT Sell for Less Than <br /><br /> <span className="breakEven-price">{"$" + breakEven.toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</span></p>
-        </div>
-      )
-    }
+  const gainLossCards = (buyPrice, sellPrice) => {
+    const commissionSellPrice = buyPrice - (buyPrice * .10)
+    return commissionSellPrice - sellPrice
   }
 
   const onFieldChange = (e) => {
@@ -251,7 +232,6 @@ export default function Home({ profitOnly }) {
     }
   }
 
-
   return (
     <div>
       <div className="flex">
@@ -275,7 +255,7 @@ export default function Home({ profitOnly }) {
         {areStatsOpen && (
           gainLossHeader(form["Buy Now Price"], form["Sell Now Price"])
         )}
-        <h1 className="main-title">CARDS WITH OVER $1000 FLIP VALUE</h1>
+        <h1 className="main-title">Top Flip Cards</h1>
         <h2 className='secondary-title'>{refreshTime === true && "CARD DATA OVER 1 MINUTE OLD, PLEASE CONSIDER REFRESHING PAGE"}</h2>
         <div className='refresh-button-container'>
           {refreshTime === true && <button className="refresh-button" onClick={e => window.location.reload()}>REFRESH</button>}
@@ -288,21 +268,10 @@ export default function Home({ profitOnly }) {
             sellNowPrice={r.best_buy_price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
             buyNowPrice={r.best_sell_price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
             moneyMake={gainLossCards(r.best_sell_price, r.best_buy_price)}
+            breakEven={breakEven(r.best_buy_price)}
+            playerTeam={r.item.team}
             img={r?.item.img}
             />
-            {/* <img alt="baseball player card" className="card-image" src={r?.item.img}></img>
-            <div className='card-info'>
-              <div className='border-bottom-cards player-name card-info-spacing'>
-                {r.listing_name} ({r.item.ovr})
-              </div>
-              <div className='buy-sell-now-price card-info-spacing'>
-                Buy Now Price: ${r.best_sell_price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-              </div>
-              <div className='buy-sell-now-price card-info-spacing'>
-                Sell Now Price: ${r.best_buy_price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-              </div>
-              <div className="making-info-spacing">{gainLossCards(r.best_sell_price, r.best_buy_price)}</div>
-            </div> */}
           </div>
         )}
       </div>
@@ -315,7 +284,7 @@ export default function Home({ profitOnly }) {
       .flex {
         display: flex;
         flex-wrap: wrap;
-        justify-content: center;
+        justify-content: space-around;
         width: 100%;
       }
       
@@ -456,8 +425,9 @@ export default function Home({ profitOnly }) {
         display: flex;
         justify-content: center;
         text-align: center;
-        margin-bottom: 0;
-        font-size: 34px;
+        margin-top: 1rem;
+        margin-bottom: 1rem;
+        font-size: 3rem;
       }
       
       .secondary-title {
