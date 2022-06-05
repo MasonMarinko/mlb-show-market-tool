@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Accordian from './accordian';
+import { useRouter } from 'next/router';
+
 
 export const getServerSideProps = async () => {
   const promises = []
@@ -14,6 +16,7 @@ export const getServerSideProps = async () => {
     })
     promises.push(p)
   }
+  console.log("hit again")
   const listings = await Promise.all(promises)
   const results = listings.reduce((acc, curr) => [...acc, ...curr], [])
   return {
@@ -32,7 +35,7 @@ export const getServerSideProps = async () => {
 }
 
 export default function Home({ profitOnly }) {
-  const [resData, setResData] = useState(profitOnly)
+  const [resData, setResData] = useState()
   const [buyNowPrice, setBuyNowPrice] = useState({})
   const [sellNowPrice, setSellNowPrice] = useState({})
   const [form, setForm] = useState({});
@@ -41,10 +44,25 @@ export default function Home({ profitOnly }) {
   const [isSold, setIsSold] = useState(false);
   const [refreshTime, setRefreshTime] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  const [componentRefreshed, setComponentRefreshed] = useState(false);
+  const [refreshClicked, setRefreshClicked] = useState(false);
+  const router = useRouter()
+
 
   setTimeout(() => {
     setRefreshTime(true);
-  }, "60000")
+  }, "3000")
+
+  useEffect(() => {
+    setResData(profitOnly)
+    console.log("useEffect hit")
+  }, [resData])
+  
+  const checkData =  (e) => {
+    e.preventDefault()
+    router.replace(router.asPath)
+    setResData(profitOnly)
+  }
 
   const breakEven = (bestBuyPrice) => {
     return bestBuyPrice/(.90)
@@ -239,12 +257,10 @@ export default function Home({ profitOnly }) {
         {!areStatsOpen && (
           <form className="form-styling" onSubmit={(e) => onSubmit(e)}>
             <label className='buy-price'>
-              {!isMobile && <span className='input-labels'>Buy Now Price</span>}
               <input placeholder='Buy Now Price' onChange={e => onFieldChange(e)} type="integer" name="Buy Now Price" />
             </label>
             <br/>
             <label className='sell-price'>
-            {!isMobile && <span className='input-labels'>Sell Now Price</span>}
               <input placeholder='Sell Now Price' onChange={e => onFieldChange(e)} type="integer" name="Sell Now Price" />
               <br />
               <br />
@@ -256,9 +272,9 @@ export default function Home({ profitOnly }) {
           gainLossHeader(form["Buy Now Price"], form["Sell Now Price"])
         )}
         <h1 className="main-title">Top Flip Cards</h1>
-        <h2 className='secondary-title'>{refreshTime === true && "CARD DATA OVER 1 MINUTE OLD, PLEASE CONSIDER REFRESHING PAGE"}</h2>
+        <h2 className='secondary-title'>{refreshTime === true && "CARD DATA OVER 30 SECONDS OLD, PLEASE CONSIDER REFRESHING PAGE"}</h2>
         <div className='refresh-button-container'>
-          {refreshTime === true && <button className="refresh-button" onClick={e => window.location.reload()}>REFRESH</button>}
+          {refreshTime === true && <button className="refresh-button" onClick={e => checkData(e)}>REFRESH</button>}
         </div>
         {resData?.map((r, i) =>
           <div className='flex-container' key={i}>

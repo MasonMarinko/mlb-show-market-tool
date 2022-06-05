@@ -154,6 +154,11 @@ const Accordian = ({name, rating, sellNowPrice, buyNowPrice, moneyMake, playerTe
       team: "Nationals",
       hex: "#aa1e22",
       hex2: "#212759"
+    },
+    {
+      team: "Free Agents",
+      hex: "#808080",
+      hex2: "#ffffff"
     }
   ]
 
@@ -163,11 +168,11 @@ const Accordian = ({name, rating, sellNowPrice, buyNowPrice, moneyMake, playerTe
   }
 
   const getTeamColor = (playerTeam) => {
-    return teamHex.find(team => team.team === playerTeam).hex
+    return teamHex.find(team => team.team === playerTeam).hex 
   }
 
   const getTeamColor2 = (playerTeam) => {
-    return teamHex.find(team => team.team === playerTeam).hex2
+   return teamHex.find(team => team.team === playerTeam).hex2
   }
 
   const toggleOverlay = (e) => {
