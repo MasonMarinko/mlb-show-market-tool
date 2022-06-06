@@ -208,12 +208,12 @@ const Accordian = ({name, rating, sellNowPrice, buyNowPrice, moneyMake, playerTe
          </div>
          <div className="buy-now">
          <div className="header-background">
-         <div className='text-header card-info-spacing overlay-text'>Break Even:</div><button type="button" onClick={e=>toggleHelpText(e)} className="info-icon">!</button>
-         {isHelpOpen && <div className="help-text">If card was bought for ${sellNowPrice} (the current purchase price) this represents the lowest you should sell the card for to break even after the 10% commission.<br/><br/>
+         <div className='text-header card-info-spacing overlay-text'>Break Even:<button type="button" onClick={e=>toggleHelpText(e)} className="info-icon">!</button></div>
+         <div className="help-container">
+         {isHelpOpen && <div className="help-text ">If card was bought for ${sellNowPrice} (the current purchase price) this represents the lowest you should sell the card for to break even after the 10% commission.<br/><br/>
          <span className = "math-title">MATH BREAKDOWN:</span><br/>
          <div className="equation-title"> &nbsp;${breakEven.toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')} (Break Even) <br/> <span className="equation-underline">- 10% (Commission)</span>= ${sellNowPrice} (What was paid)</div></div>}
-
-
+         </div>
          </div>
          <div className="card-info-spacing overlay-text">{"$" + breakEven.toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</div>
          </div>
@@ -293,11 +293,6 @@ const Accordian = ({name, rating, sellNowPrice, buyNowPrice, moneyMake, playerTe
     background-color: #39b9d2;
   }
   
-  @media screen and (max-width: 700px) {
-    body {
-      font-size: 18px;
-    }
-  }
   .flex {
     display: flex;
     flex-wrap: wrap;
@@ -306,12 +301,7 @@ const Accordian = ({name, rating, sellNowPrice, buyNowPrice, moneyMake, playerTe
 
   .header-background {
     background-color: black;
-    width: 208px;
     border-radius: 15px 15px 0 0;
-    height: 30px;
-    justify-content: center;
-    display: flex;
-    align-items: end;
   }
   
   .sell-price input {
@@ -336,16 +326,6 @@ const Accordian = ({name, rating, sellNowPrice, buyNowPrice, moneyMake, playerTe
     box-shadow: 0 10px 16px 0 rgb(0 0 0 / 20%), 0 6px 20px 0 rgb(0 0 0 / 19%)
   }
 
-  .help-text {
-    position: absolute;
-    background-color: white;
-    width: 23rem;
-    margin-bottom: 1.5rem;
-    border-radius: 15px;
-    padding: .5rem;
-    border: 2px solid black;
-    font-size: 1.5rem;
-  }
   
   .math-title {
     display: flex;
@@ -358,16 +338,39 @@ const Accordian = ({name, rating, sellNowPrice, buyNowPrice, moneyMake, playerTe
   .data-overlay {
     font-size: 16rem;
   }
-
+  
   .text-header {
     color: white;
   }
 
-  .equation-title {
+  .help-text {
+    position: absolute;
+    background-color: white;
+    width: 23rem;
+    margin-bottom: 1.5rem;
+    border-radius: 15px;
+    padding: .5rem;
+    border: 2px solid black;
+    font-size: 1.5rem;
+  
+  }
+  
+  .help-container {
+    position: fixed;
+    top: 33px;
+    left: 0;
+    width: 100%;
+    height: 100%;
     display: flex;
-    flex-wrap: wrap;
-    justify-content: right;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .equation-title {    
+    display: flex;
+    justify-content: end;
     padding-right: 3rem;
+    flex-wrap: wrap;
   }
 
   .overlay-container {
@@ -409,26 +412,23 @@ const Accordian = ({name, rating, sellNowPrice, buyNowPrice, moneyMake, playerTe
     border: 2px solid white;
     border-radius: 60%;
     display: flex;
-    justify-content: center;
     width: 20px;
     height: 20px;
     background-color: black;
-    align-items: center;
     cursor: pointer;
     position: absolute;
-    margin-left: 10rem;
-    margin-bottom: .4rem;
+    margin-left: 9.7rem;
     font-weight: bold;
     z-index: 1;
+    justify-content: center;
+    padding-left: .1rem;
   }
 
   .buy-now {
-    border-radius: 20px;
-    border: .2rem black solid;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    margin-bottom: 1rem;
+    border: 1px solid black;
+    border-radius: 15px;
+    min-width: 12rem;
+    margin-bottom: 1.7rem;
   }
 
   .sell-now {
@@ -501,6 +501,7 @@ const Accordian = ({name, rating, sellNowPrice, buyNowPrice, moneyMake, playerTe
         font-weight: bold;
         font-size: 1.5rem;
         text-align: center;
+        justify-content: center;
   } 
   
     .making-info-spacing {

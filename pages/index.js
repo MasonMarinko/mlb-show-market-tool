@@ -16,7 +16,6 @@ export const getServerSideProps = async () => {
     })
     promises.push(p)
   }
-  console.log("hit again")
   const listings = await Promise.all(promises)
   const results = listings.reduce((acc, curr) => [...acc, ...curr], [])
   return {
@@ -35,7 +34,7 @@ export const getServerSideProps = async () => {
 }
 
 export default function Home({ profitOnly }) {
-  const [resData, setResData] = useState()
+  const [resData, setResData] = useState(profitOnly)
   const [buyNowPrice, setBuyNowPrice] = useState({})
   const [sellNowPrice, setSellNowPrice] = useState({})
   const [form, setForm] = useState({});
@@ -47,19 +46,8 @@ export default function Home({ profitOnly }) {
   const [componentRefreshed, setComponentRefreshed] = useState(false);
   const [refreshClicked, setRefreshClicked] = useState(false);
   const router = useRouter()
-
-
-  setTimeout(() => {
-    setRefreshTime(true);
-  }, "3000")
-
-  useEffect(() => {
-    setResData(profitOnly)
-    console.log("useEffect hit")
-  }, [resData])
   
   const checkData =  (e) => {
-    e.preventDefault()
     router.replace(router.asPath)
     setResData(profitOnly)
   }
@@ -115,6 +103,11 @@ export default function Home({ profitOnly }) {
     }
   }
 
+
+
+// VERIFY LOGIC ONCE FUNCTION UPDATED
+
+
   const onPostPurchaseSubmit = (e) => {
     e.preventDefault(e);
     if (buyNowPrice["Final Purchased Price"] && !sellNowPrice["Final Sold Price"]) {
@@ -138,6 +131,12 @@ export default function Home({ profitOnly }) {
       })
     }
   }
+
+
+
+// ============================================================
+
+
 
   const startOver = (e) => {
     e.preventDefault(e)
@@ -167,88 +166,141 @@ export default function Home({ profitOnly }) {
     const buySellDifference = commissionSellPrice - sellPrice
     const breakEven = sellPrice / (.90)
 
-    if (Math.sign(buySellDifference) === -1) {
       return (
         <div className="stats-container">
-          <h1 className='border-bottom useful-title'>Useful Information:</h1>
           <div className="losing-container">
             <div className="entered-values-container">
-              <h3 className="underline">Buy Now Entered:</h3><br />
+              <div className="stat-border">
+              <h1 className="title-padding entered-titles">Buy Now Entered</h1>
               <p>${form["Buy Now Price"].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</p>
-              <h3 className="underline">Sell Now Entered:</h3>
+              </div>
+              <div className="stat-border">
+              <h1 className="title-padding entered-titles">Sell Now Entered</h1>
               <p>${form["Sell Now Price"].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</p>
+              </div>
             </div>
-            <h3 className="title-padding-top">Money Lost (Based on buy/sell prices above)</h3>
+            <div className="entered-values-container">
+            <div className="stat-border">
+            <h1 className="entered-titles title-padding">{Math.sign(buySellDifference) === -1 ? "Money Lost" : "Money Made"}</h1>
             <div className="border-bottom"></div>
-            <p className="losing-header">{"Losing: " + '$' + Math.abs(buySellDifference).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</p>
-            <h3 className="title-padding-top">Recommendation</h3>
+            <p className="net-header">{Math.sign(buySellDifference) === -1 ? "Losing:"  + "$" + Math.abs(buySellDifference).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',') : (isPurchased ? "Made: " : "Making: ") + "$" + Math.abs(buySellDifference).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</p>
+            </div>
+            <div className="stat-border">
+            <h1 className="entered-titles title-padding">Recommendation</h1>
             <div className="border-bottom"></div>
-            <p className="losing-header">{"DON'T buy at current inputted price of " + '$' + buyPrice.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</p>
+            <p className="suggestion-header">{Math.sign(buySellDifference) === -1 ? "DON'T buy at " + '$' + buyPrice.replace(/\B(?=(\d{3})+(?!\d))/g, ',') + " or higher" : "BUY at " + '$' + buyPrice.replace(/\B(?=(\d{3})+(?!\d))/g, ',') + " or lower"}</p>
+            </div>
           </div>
-          <h2 className="update-info-title">Did you buy the card? Enter details of purchase here to update!</h2>
+          </div>
+        {Math.sign(buySellDifference) === 1 &&
+          <>
+          <div className="stat-border-single">
+           <h1 className="title-padding ">Break Even Price </h1>
+             <p className="breakEven-price">{"$" + breakEven.toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</p>
+            </div>
+          </>}
+          <div className="purchase-input-title">
+          <h2 className="update-info-title">Purchase a card?</h2>
+          <h2 className='update-info-title'>Enter Details here to get new calculations!</h2>
+          </div>
           <form className="form-styling" onSubmit={(e) => onPostPurchaseSubmit(e)}>
+            <div className="input-container">
             <label className='input-labels buy-price'>
-              Final Purchased Price:
-              <input onChange={e => onPostPurchaseChange(e)} type="integer" name="Final Sold Price" />
+              <div className="input-contain">
+              <input onChange={e => onPostPurchaseChange(e)} placeholder="Final Purchased Price" type="integer" name="Final Sold Price" />
+              </div>
             </label>
             <label className='input-labels sell-price'>
-              Final Sold Price:
-              <input onChange={e => onPostPurchaseChange(e)} type="integer" name="Final Purchased Price" />
-              <input type="submit" value="Submit" />
-            </label>
-          </form>
+              <div className="input-contain">
+              <input onChange={e => onPostPurchaseChange(e)} placeholder="Final Sold Price" type="integer" name="Final Purchased Price" />
+              </div>
+              <div className="input-contain">
+              <input className="submit-button" type="submit" value="Submit" />
+              </div>
+            <div className="input-contain">
           <button className="startOver-button" onClick={e => startOver(e)}>Start Over</button>
-        </div>
-      )
-    } else {
-      return (
-        <div className="stats-container">
-          <h1 className='border-bottom useful-title'>Useful Information:</h1>
-          <div className="making-container">
-            <div className="entered-values-container">
-              <h3 className="underline">{isPurchased ? "Sold For Price" : "Buy Now Entered"}:</h3><br />
-              <p>${form["Buy Now Price"].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</p>
-              <h3 className="underline">{isSold ? "Purchased Price" : "Sell Now Entered"}:</h3>
-              <p>${form["Sell Now Price"].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</p>
-            </div>
-            <h3 className="title-padding-top">Money Made</h3>
-            <p className="parentheses-text">(Based on buy/sell prices above)</p>
-            <div className='border-bottom'></div>
-            <p className="making-header">{isPurchased ? "Made: " : "Making: "}{'$' + Math.abs(buySellDifference).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</p>
-            {!isPurchased &&
-              <>
-                <h3 className="title-padding-top" >Recommendation</h3>
-                <div className='border-bottom'></div>
-                <p className="making-header">{"BUY at current inputted price of " + '$' + buyPrice.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</p>
-              </>}
-            <h3 className="title-padding-top breakEven">Break Even Price </h3>
-            <p className="parentheses-text">(at currently entered price DO NOT sell for less than price below)</p>
-            <div className='border-bottom'></div>
-            <p className="breakEven-price">{"$" + breakEven.toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</p>
           </div>
-          <h2 className="update-info-title">Did you buy the card? Enter details of purchase here to update!</h2>
-          <form className="form-styling" onSubmit={(e) => onPostPurchaseSubmit(e)}>
-            <label className='buy-price'>
-              <span className="input-labels">
-                Final Purchased Price:
-              </span>
-              <input onChange={e => onPostPurchaseChange(e)} type="integer" name="Final Sold Price" />
             </label>
-            <label className='sell-price'>
-              <span className="input-labels">
-                Final Sold Price:
-              </span>
-              <input onChange={e => onPostPurchaseChange(e)} type="integer" name="Final Purchased Price" />
-              <input type="submit" value="Submit" />
-            </label>
-            <div className="startOver-button-container">
-              <button className="startOver-button" onClick={e => startOver(e)}>Start Over</button>
             </div>
           </form>
+          <style jsx>{`
+          input {
+              margin-bottom: 1rem;
+              min-width: 15rem;
+              min-height: 2rem;
+          }
+          button {
+            margin-bottom: 1rem;
+              min-width: 15rem;
+              min-height: 2rem;
+          }
+          h1 {
+            font-size: 1.5rem;
+          }
+          .update-info-title {
+            margin: 0;
+          }
+          .submit-button {
+            margin: 0;
+          }
+          .input-contain {
+            display: flex;
+            min-width: 15rem;
+            min-height: 2rem;
+            margin-top: 1rem;
+            justify-content: space-around;
+          }
+          .input-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+          }
+          .purchase-input-title {
+            display: flex;
+            flex-wrap: wrap;
+            margin-top: 3rem;
+            justify-content: center;
+            text-align: center;
+          }
+          .title-padding {
+            margin-top: 0;
+            border-radius: 15px 15px 0 0;
+            background-color: black;
+            color: white;
+          }
+          .entered-values-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+          }
+          .stats-container {
+            justify-content: center;
+            align-items: center;
+            display: flex;
+            width: 41rem;
+            flex-wrap: wrap;
+          }
+          .stat-border {
+            border: 1px solid black;
+            border-radius: 15px;
+            min-width: 14rem;
+            text-align: center;
+            margin-top: 1rem;
+          }
+          .stat-border-single {
+            border: 1px solid black;
+            border-radius: 15px;
+            min-width: 14rem;
+            text-align: center;
+            margin-top: 1rem;
+          }
+           `}</style>
         </div>
       )
-    }
-  }
+    } 
+
+
+
 
   return (
     <div>
@@ -271,10 +323,8 @@ export default function Home({ profitOnly }) {
         {areStatsOpen && (
           gainLossHeader(form["Buy Now Price"], form["Sell Now Price"])
         )}
-        <h1 className="main-title">Top Flip Cards</h1>
-        <h2 className='secondary-title'>{refreshTime === true && "CARD DATA OVER 30 SECONDS OLD, PLEASE CONSIDER REFRESHING PAGE"}</h2>
+        <h1 className="border-top main-title-flip">Top Flip Cards</h1>
         <div className='refresh-button-container'>
-          {refreshTime === true && <button className="refresh-button" onClick={e => checkData(e)}>REFRESH</button>}
         </div>
         {resData?.map((r, i) =>
           <div className='flex-container' key={i}>
@@ -314,147 +364,32 @@ export default function Home({ profitOnly }) {
         min-width: 15rem;
         min-height: 2rem;
       }
-      
       .form-styling {
-        width: 100%;
-        padding-bottom: 5rem;
         text-align: center;
       }
-      
-      .money-back {
-        font-size:10px;
-      }
-      
-      
-      .cart-image {
-        align-self: center;
-      }
-      
-      .card-info {
-        width: 100%;
-        text-align: center;
-      }
-      
-        .card-info-spacing {
-            margin-bottom: .7rem;
-        }
-      
-        .making-info-spacing {
-            margin-top: 1.5rem;
-        }
-      
-        .player-name {
-            font-size: 1.7rem;
-            font-weight: bold;
-        }
-        
-        .buy-sell-now-price {
-            margin-top: 1rem;
-            font-size: 1.5rem
-        }
-      
-        .border-bottom-cards {
-            border-bottom: 1px solid black;
-        }
-      
-      h2 {
-        margin-bottom:0;
-        padding-top: 1rem;
-      }
-      
-      .stats-container {
-        width: 100%;
-        padding-top: 1rem;
-        padding-bottom: 3rem;
-        text-align: center;
-      }
-        .stats-container h1 {
-            font-size: 50px;
-        }
-      
-      
-      .breakEven-price {
-        margin-top: 0;
-      }
-      
-      .making-container {
-        padding: 0;
-        margin: 0;
-        padding-top:1rem;
-        font-weight: bold;
-        font-size:30px;
-      }
-      
-      .losing-container {
-        padding: 0;
-        margin: 0;
-        font-weight: bold;
-        font-size:30px;
-        color:red;
-      }
-        .losing-container h3 {
-            color:black;
-            margin-bottom: 0;
-        }
-      
-      
-      .making-container {
-        padding: 0;
-        margin: 0;
-        font-weight: bold;
-        font-size:30px;
-        color:green;
-      }
-      
-        .making-container h3 {
-            color:black;
-            margin-bottom: 0;
-        }
-      
-      .breakEven {
-        color: green;
-      }
-      
-      .border-bottom {
-        border-bottom: 1px solid black;
-        margin: 0 600px 0 600px;
-      }
-      
-      .timer-data {
-        font-size: 20px;
-      }
-      
-      .underline {
-        text-decoration: underline;
-      }
-      
-      .useful-title {
-        margin-bottom: 40px;
-      }
-      
-      .making-container .breakEven {
-        color: black;
-      }
-      
       .main-title {
         min-width: 100%;
         display: flex;
         justify-content: center;
         text-align: center;
         margin-top: 1rem;
-        margin-bottom: 1rem;
-        font-size: 3rem;
+        margin-bottom: 2.5rem;
+        font-size: 4rem;
       }
-      
-      .secondary-title {
+
+      .border-top {
+        border-top: 2px solid black;
+      }
+
+      .main-title-flip {
         min-width: 100%;
         display: flex;
-        justify-content: space-around;
+        justify-content: center;
         text-align: center;
-        font-size: 18px;
-        margin: 0;
-        padding: 0 0 1rem 0;
-        color: red;
+        margin-top: 5rem;
+        margin-bottom: 1rem;
+        font-size: 4rem;
+        padding-top: 2rem;
       }
       
       .refresh-button-container {
@@ -463,92 +398,6 @@ export default function Home({ profitOnly }) {
         justify-content: space-around;
         padding: 0 0 2.5rem 0;
         margin: 0;
-      }
-      
-      .title-padding-top {
-        padding-top: 3rem;
-        margin: 0px;
-      }
-      
-      .entered-values-container {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-      }
-      
-        .entered-values-container h3 {
-            margin-top: 0;
-            padding-right: 1rem;
-        }
-      
-        .entered-values-container p {
-            align-items: center;
-            margin: 0;
-            padding-right:4rem;
-        }
-      
-      .breakEven .breakEven-price {
-        color: green;
-        text-decoration: none;
-      }
-      
-      .refresh-button {
-        margin-top:0;
-        padding: 10px 40px 10px 40px;
-      }
-      
-      .form-styling {
-        padding-top: 15px;
-        padding-bottom: 50px;
-        border-bottom: solid 1px black;
-      }
-      
-        .submit-button {
-            padding: 10px 50px 10px 50px;
-        }
-        .input-labels {
-            padding-right: 1rem;
-        }
-      
-      .update-info-title {
-        padding-top: 75px;
-      }
-      
-      .startOver-button-container {
-        min-width: 100%;
-      }
-      
-      .startOver-button {
-        margin-top: 2rem;
-        padding: 10px 50px 10px 50px;
-      }
-      
-      .parentheses-text {
-        font-size: 1.2rem;
-        margin-top: 0px;
-        color: black;
-        margin:0 0 5px 0;
-      }
-      
-      .losing-header {
-        padding: 0;
-        margin: 0;
-        font-weight: bold;
-        font-size:30px;
-        color:red;
-      }
-      
-      .making-header {
-        padding: 0;
-        margin: 0;
-        font-weight: bold;
-        font-size:30px;
-        color:green;
-      }
-      
-      .bottom-border{
-        border-bottom: solid thin darkGray;
-        padding-top: 2rem;
       }
       `}</style>
     </div>
