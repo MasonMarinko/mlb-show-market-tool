@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 
-const Accordian = ({name, rating, sellNowPrice, buyNowPrice, moneyMake, playerTeam, breakEven, img}) => {
+const Accordian = ({name, rating, sellNowPrice, buyNowPrice, moneyMake, playerTeam, breakEven, img, onChange}) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isOverlay, setIsOverlay] = useState(false);
   const [isHelpOpen, setIsHelpOpen] = useState(false);
@@ -162,6 +162,14 @@ const Accordian = ({name, rating, sellNowPrice, buyNowPrice, moneyMake, playerTe
     }
   ]
 
+  const onMouseEnter = (playerTeam) => {
+    onChange(teamHex.find(team => team.team === playerTeam).hex, true);
+
+  }
+
+  const onMouseLeave = (e) => {
+    onChange(null, false)
+  }
 
   const toggleHelpText = () => {
     setIsHelpOpen(!isHelpOpen);
@@ -227,7 +235,7 @@ const Accordian = ({name, rating, sellNowPrice, buyNowPrice, moneyMake, playerTe
           </div>
         </div>
       </div>}
-  <div onClick={e=>toggleOverlay()} className='flex-container'>
+  <div onClick={e=>toggleOverlay()} onMouseEnter={e=>onMouseEnter(playerTeam)} onMouseLeave={e=>onMouseLeave(e)} className='flex-container'>
   <div className='card-info'>
     <div className={`${isOpen && "border-bottom-cards"} player-name card-info-spacing`}>
         <div>{name} ({rating}) </div>
@@ -291,12 +299,6 @@ const Accordian = ({name, rating, sellNowPrice, buyNowPrice, moneyMake, playerTe
   
   .accordian-content {
     background-color: #39b9d2;
-  }
-  
-  .flex {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
   }
 
   .header-background {

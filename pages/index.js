@@ -41,17 +41,18 @@ export default function Home({ profitOnly }) {
   const [areStatsOpen, setAreStatsOpen] = useState(false);
   const [isPurchased, setIsPurchased] = useState(false);
   const [isSold, setIsSold] = useState(false);
-  const [refreshTime, setRefreshTime] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
-  const [componentRefreshed, setComponentRefreshed] = useState(false);
-  const [refreshClicked, setRefreshClicked] = useState(false);
-  const router = useRouter()
-  
-  const checkData =  (e) => {
-    router.replace(router.asPath)
-    setResData(profitOnly)
+  const [isHovering, setIsHovering] = useState(false);
+  const [cardColor, setPlayerColor] = useState();
+  const [isHelpOpen, setIsHelpOpen] = useState(false);
+ 
+
+  const handleChange = (cardColor, hover) => {
+    setPlayerColor(cardColor)
+    setIsHovering(hover)
   }
 
+  
   const breakEven = (bestBuyPrice) => {
     return bestBuyPrice/(.90)
   }
@@ -60,6 +61,11 @@ export default function Home({ profitOnly }) {
     const commissionSellPrice = buyPrice - (buyPrice * .10)
     return commissionSellPrice - sellPrice
   }
+
+  const toggleHelpText = () => {
+    setIsHelpOpen(!isHelpOpen);
+  }
+
 
   const onFieldChange = (e) => {
     if (e.target.name === "Buy Now Price") {
@@ -171,7 +177,7 @@ export default function Home({ profitOnly }) {
           <div className="losing-container">
             <div className="entered-values-container">
               <div className="stat-border">
-              <h1 className="title-padding entered-titles">Buy Now Entered</h1>
+              <h1 className="title-padding entered-titles">Buy Now Entered</h1>         
               <p>${form["Buy Now Price"].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</p>
               </div>
               <div className="stat-border">
@@ -185,7 +191,7 @@ export default function Home({ profitOnly }) {
             <div className="border-bottom"></div>
             <p className="net-header">{Math.sign(buySellDifference) === -1 ? "Losing:"  + "$" + Math.abs(buySellDifference).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',') : (isPurchased ? "Made: " : "Making: ") + "$" + Math.abs(buySellDifference).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</p>
             </div>
-            <div className="stat-border">
+            <div className="stat-border background-color">
             <h1 className="entered-titles title-padding">Recommendation</h1>
             <div className="border-bottom"></div>
             <p className="suggestion-header">{Math.sign(buySellDifference) === -1 ? "DON'T buy at " + '$' + buyPrice.replace(/\B(?=(\d{3})+(?!\d))/g, ',') + " or higher" : "BUY at " + '$' + buyPrice.replace(/\B(?=(\d{3})+(?!\d))/g, ',') + " or lower"}</p>
@@ -207,12 +213,12 @@ export default function Home({ profitOnly }) {
             <div className="input-container">
             <label className='input-labels buy-price'>
               <div className="input-contain">
-              <input onChange={e => onPostPurchaseChange(e)} placeholder="Final Purchased Price" type="integer" name="Final Sold Price" />
+              <input onChange={e => onPostPurchaseChange(e)} placeholder="Final Purchased Price" type="number" name="Final Sold Price" />
               </div>
             </label>
             <label className='input-labels sell-price'>
               <div className="input-contain">
-              <input onChange={e => onPostPurchaseChange(e)} placeholder="Final Sold Price" type="integer" name="Final Purchased Price" />
+              <input onChange={e => onPostPurchaseChange(e)} placeholder="Final Sold Price" type="number" name="Final Purchased Price" />
               </div>
               <div className="input-contain">
               <input className="submit-button" type="submit" value="Submit" />
@@ -225,14 +231,14 @@ export default function Home({ profitOnly }) {
           </form>
           <style jsx>{`
           input {
-              margin-bottom: 1rem;
+            margin-bottom: 1rem;
               min-width: 15rem;
               min-height: 2rem;
           }
           button {
             margin-bottom: 1rem;
-              min-width: 15rem;
-              min-height: 2rem;
+            min-width: 15rem;
+            min-height: 2rem;
           }
           h1 {
             font-size: 1.5rem;
@@ -242,6 +248,9 @@ export default function Home({ profitOnly }) {
           }
           .submit-button {
             margin: 0;
+          }
+          .background-color {
+            background-color: ${Math.sign(buySellDifference) === 1 ? "green ": "red"};
           }
           .input-contain {
             display: flex;
@@ -299,21 +308,24 @@ export default function Home({ profitOnly }) {
       )
     } 
 
-
-
-
   return (
-    <div>
+    <div id="root">
       <div className="flex">
-        <h1 className="main-title">Flip Calculator</h1>
+        <h1 className="main-title">Flip Calculator <div className = "icon-container"><button type="button" onClick={e=>toggleHelpText(e)} className="info-icon">!</button></div></h1>
+
+        {isHelpOpen && <div onClick={e => toggleHelpText(e)} className="help-container">
+          <div className="help-text ">In MLB The Show, you can submit Buy and Sell Orders. <br/><br/> When you see "Buy Now", you're actually seeing the lowest available price that someone has posted as a "Sell Order". <br/><br/>Alternately, if you see "Sell Now", you're
+          looking at the cheapest amount someone is posting they will pay on their "Buy Order". <br/><br/> For more information, checkout <a href="https://www.youtube.com/watch?v=ZfSel0u1Ws0">this video.</a></div>
+         </div>}
+        
         {!areStatsOpen && (
           <form className="form-styling" onSubmit={(e) => onSubmit(e)}>
             <label className='buy-price'>
-              <input placeholder='Buy Now Price' onChange={e => onFieldChange(e)} type="integer" name="Buy Now Price" />
+              <input placeholder='Buy Now Price (For more info, click "i" icon)' onChange={e => onFieldChange(e)} type="number" name="Buy Now Price" />
             </label>
             <br/>
             <label className='sell-price'>
-              <input placeholder='Sell Now Price' onChange={e => onFieldChange(e)} type="integer" name="Sell Now Price" />
+              <input placeholder='Sell Now Price (For more info, click "i" icon)' onChange={e => onFieldChange(e)} type="number" name="Sell Now Price" />
               <br />
               <br />
               <input className="submit-button" type="submit" value="Submit" />
@@ -337,31 +349,50 @@ export default function Home({ profitOnly }) {
             breakEven={breakEven(r.best_buy_price)}
             playerTeam={r.item.team}
             img={r?.item.img}
+            onChange={handleChange}
             />
           </div>
         )}
       </div>
       <style jsx>{`
       #root {
+        height: 100% !important;
         display: flex;
-        flex-wrap: wrap;
+        justify-content: center;
       }
-      
       .flex {
         display: flex;
+        background-color: azure;
         flex-wrap: wrap;
         justify-content: space-around;
-        width: 100%;
+        transition: all 500ms ease-out;
+        box-shadow: 0px 0px 25px 15px ${cardColor}
       }
       
-      .sell-price input {
-        min-width: 15rem;
-        min-height: 2rem;
+      .info-icon {
+        color: white;
+        ${!isHelpOpen && "display: none"}
+        border: 2px solid white;
+        border-radius: 60%;
+        display: flex;
+        width: 30px;
+        height: 30px;
+        background-color: black;
+        cursor: pointer;
+        font-weight: bold;
+        font-size: 1.6rem;
+        justify-content: center;
+        align-items: center;
+      }
+      .icon-container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
       }
       
-      .buy-price input {
+      input {
         margin-bottom: 2rem;
-        min-width: 15rem;
+        min-width: 25rem;
         min-height: 2rem;
       }
       .form-styling {
@@ -369,16 +400,37 @@ export default function Home({ profitOnly }) {
       }
       .main-title {
         min-width: 100%;
-        display: flex;
         justify-content: center;
         text-align: center;
         margin-top: 1rem;
-        margin-bottom: 2.5rem;
+        margin-bottom: 1rem;
         font-size: 4rem;
       }
 
       .border-top {
         border-top: 2px solid black;
+      }
+
+      .help-text {
+        position: absolute;
+        background-color: white;
+        width: 23rem;
+        margin-bottom: 1.5rem;
+        border-radius: 15px;
+        padding: .5rem;
+        border: 2px solid black;
+        font-size: 1.5rem;
+      }
+
+      .help-container {
+        position: fixed;
+        top: 33px;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: start;
       }
 
       .main-title-flip {
@@ -399,6 +451,11 @@ export default function Home({ profitOnly }) {
         padding: 0 0 2.5rem 0;
         margin: 0;
       }
+      @media screen and (min-width: 740px) {
+        .flex {
+          width: calc(100% - 250px);
+        }
+     }
       `}</style>
     </div>
   );
