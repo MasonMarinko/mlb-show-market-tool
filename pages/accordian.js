@@ -184,7 +184,7 @@ const Accordian = ({name, rating, sellNowPrice, buyNowPrice, moneyMake, playerTe
   }
 
   const toggleOverlay = (e) => {
-    if (e?.target?.className.includes('info-icon')) {
+    if (e?.target?.className.includes("info-icon")) {
       return
     } else {
       setIsOverlay(!isOverlay)
@@ -204,56 +204,56 @@ const Accordian = ({name, rating, sellNowPrice, buyNowPrice, moneyMake, playerTe
             <div className="background-box">
             <div className="buy-now">
               <div className="header-background">
-         <div className='text-header card-info-spacing overlay-text'>Buy Now Price:</div>
+         <div className="text-header card-info-spacing overlay-text">Buy Now Price:</div>
          </div>
          <div className="card-info-spacing overlay-text">${buyNowPrice}</div>
          </div>
          <div className="buy-now">
          <div className="header-background">
-         <div className='text-header card-info-spacing overlay-text'>Sell Now Price:</div>
+         <div className="text-header card-info-spacing overlay-text">Sell Now Price:</div>
          </div>
          <div className="card-info-spacing overlay-text">${sellNowPrice}</div>
          </div>
          <div className="buy-now">
          <div className="header-background">
-         <div className='text-header card-info-spacing overlay-text'>Break Even:<button type="button" onClick={e=>toggleHelpText(e)} className="info-icon">!</button></div>
+         <div className="text-header card-info-spacing overlay-text">Break Even:<button type="button" onClick={e=>toggleHelpText(e)} className="info-icon">!</button></div>
          <div className="help-container">
-         {isHelpOpen && <div className="help-text ">If card was bought for ${sellNowPrice} (the current purchase price) this represents the lowest you should sell the card for to break even after the 10% commission.<br/><br/>
+         {isHelpOpen && <div className="help-text">If card was bought for ${sellNowPrice} (the current purchase price) this represents the lowest you should sell the card for to break even after the 10% commission.<br/><br/>
          <span className = "math-title">MATH BREAKDOWN:</span><br/>
-         <div className="equation-title"> &nbsp;${breakEven.toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')} (Break Even) <br/> <span className="equation-underline">- 10% (Commission)</span>= ${sellNowPrice} (What was paid)</div></div>}
+         <div className="equation-title"> &nbsp;${breakEven.toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} (Break Even) <br/> <span className="equation-underline">- 10% (Commission)</span>= ${sellNowPrice} (What was paid)</div></div>}
          </div>
          </div>
-         <div className="card-info-spacing overlay-text">{"$" + breakEven.toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</div>
+         <div className="card-info-spacing overlay-text">{"$" + breakEven.toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</div>
          </div>
          <div className="buy-now">
          <div className="header-background">
-         <div className='text-header card-info-spacing overlay-text'>Making:</div>
+         <div className="text-header card-info-spacing overlay-text">Making:</div>
          </div>
-         <div className="card-info-spacing making-container overlay-text">{'$' + Math.abs(moneyMake).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</div>
+         <div className="card-info-spacing making-container overlay-text">{"$" + Math.abs(moneyMake).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</div>
          </div>
             </div>
           </div>
         </div>
       </div>}
-  <div onClick={e=>toggleOverlay()} onMouseEnter={e=>onMouseEnter(playerTeam)} onMouseLeave={e=>onMouseLeave(e)} className='flex-container'>
-  <div className='card-info'>
+  <div onClick={e=>toggleOverlay()} onMouseEnter={e=>onMouseEnter(playerTeam)} onMouseLeave={e=>onMouseLeave(e)} className="flex-container">
+  <div className="card-info">
     <div className={`${isOpen && "border-bottom-cards"} player-name card-info-spacing`}>
         <div>{name} ({rating}) </div>
         <div className="spacer"></div>
-        {!isOpen && <div className="making-container">{"Making: " + '$' + Math.abs(moneyMake).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</div>}
+        {!isOpen && <div className="making-container">{"Making: " + "$" + Math.abs(moneyMake).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</div>}
     </div>
     <div>
          {isOpen &&
          <>
          <div>
-         <div className='card-info-spacing'>
+         <div className="card-info-spacing">
            Buy Now Price: ${buyNowPrice}
          </div>
-         <div className='card-info-spacing'>
+         <div className="card-info-spacing">
            Sell Now Price: ${sellNowPrice}
          </div>
          <div className="making-container">
-            {"Making: " + '$' + Math.abs(moneyMake).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+            {"Making: " + "$" + Math.abs(moneyMake).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
           </div>
           </div>
          </>
@@ -695,55 +695,10 @@ const Accordian = ({name, rating, sellNowPrice, buyNowPrice, moneyMake, playerTe
     color:green;
   }
   
-  .bottom-border{
+  .bottom-border {
     border-bottom: solid thin darkGray;
     padding-top: 2rem;
   }
-
-
-  ====== Zoom-out effect ======
-
-*/
-.mfp-zoom-out {
-  
-  /* start state */
-  .mfp-with-anim {
-    opacity: 0;
-    transition: all 0.3s ease-in-out; 
-    transform: scale(1.3); 
-  }
-  
-  &.mfp-bg {
-    opacity: 0;
-	  transition: all 0.3s ease-out;
-  }
-  
-  /* animate in */
-  &.mfp-ready {
-    .mfp-with-anim {
-      opacity: 1;
-      transform: scale(1); 
-    }
-    &.mfp-bg {
-      opacity: 0.8;
-    }
-  }
-  
-  /* animate out */
-  &.mfp-removing {
-    
-    .mfp-with-anim {
-      transform: scale(1.3); 
-      opacity: 0;
-    }
-    &.mfp-bg {
-      opacity: 0;
-    }
-    
-  }
-  
-}
-
 `}</style>
     </div>
   </React.Fragment>

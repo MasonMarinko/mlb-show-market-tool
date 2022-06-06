@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import Accordian from './accordian';
 
 
@@ -82,7 +82,6 @@ export default function Home({ profitOnly }) {
     if (sellNowPrice["Sell Now Price"] === "0") {
       alert("Sell Now Price is REQUIRED")
       return
-      
     } else if (!buyNowPrice) {
       setForm({
         "Sell Now Price": sellNowPrice["Sell Now Price"]
@@ -157,11 +156,11 @@ export default function Home({ profitOnly }) {
             <div className="entered-values-container">
               <div className="stat-border left-items buy-now-left">
               <h1 className="title-padding entered-titles ">Buy Now Entered</h1>         
-              <p className='result-text'>${form["Buy Now Price"].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</p>
+              <p className="result-text">${form["Buy Now Price"].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</p>
               </div>
               <div className="stat-border">
               <h1 className="title-padding entered-titles">Sell Now Entered</h1>
-              <p className='result-text'>${form["Sell Now Price"].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</p>
+              <p className="result-text">${form["Sell Now Price"].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</p>
               </div>
             </div>
             <div className="entered-values-container">
@@ -174,7 +173,7 @@ export default function Home({ profitOnly }) {
             {!isPurchased && <div className="stat-border background-color">
             <h1 className="entered-titles title-padding">Recommendation</h1>
             <div className="border-bottom"></div>
-            <p className="result-text">{Math.sign(buySellDifference) === -1 ? "DON'T buy at " + '$' + buyPrice?.replace(/\B(?=(\d{3})+(?!\d))/g, ',') + " or higher" : "BUY at " + '$' + buyPrice?.replace(/\B(?=(\d{3})+(?!\d))/g, ',') + " or lower"}</p>
+            <p className="result-text">{Math.sign(buySellDifference) === -1 ? "DON'T buy at " + "$" + buyPrice?.replace(/\B(?=(\d{3})+(?!\d))/g, ',') + " or higher" : "BUY at " + "$" + buyPrice?.replace(/\B(?=(\d{3})+(?!\d))/g, ',') + " or lower"}</p>
             </div>}
           </div>
           </div>
@@ -185,11 +184,11 @@ export default function Home({ profitOnly }) {
             </div>}
           <div className="purchase-input-title">
           <h2 className="update-info-title">Purchase a card?</h2>
-          <h2 className='update-info-title'>Enter Details here to get new calculations!</h2>
+          <h2 className="update-info-title">Enter Details here to get new calculations!</h2>
           </div>
           <form className="form-styling" onSubmit={(e) => onPostPurchaseSubmit(e)}>
             <div className="input-container">
-            <label className='input-labels buy-price'>
+            <label className="input-labels buy-price">
               <div className="input-contain">
               <input onChange={e => onPostPurchaseChange(e)} placeholder="Final Purchased Price" type="number" name="Final Sold Price" />
               </div>
@@ -298,7 +297,7 @@ export default function Home({ profitOnly }) {
                   max-width: 41rem;
               }
               .left-items {
-                ${!isPurchased && "margin-right: 1rem;"}
+                ${!isPurchased ? "margin-right: 1rem;":null}
               }
               .buy-now-left {
                 margin-right: 1rem;
@@ -321,11 +320,11 @@ export default function Home({ profitOnly }) {
         
         {!areStatsOpen && (
           <form className="form-styling" onSubmit={(e) => onSubmit(e)}>
-            <label className='buy-price'>
+            <label className="buy-price">
               <input placeholder='Buy Now Price (For more info, click "i" icon)' onChange={e => onFieldChange(e)} type="number" name="Buy Now Price" />
             </label>
             <br/>
-            <label className='sell-price'>
+            <label className="sell-price">
               <input placeholder='Sell Now Price (For more info, click "i" icon)' onChange={e => onFieldChange(e)} type="number" name="Sell Now Price" />
               <br />
               <br />
@@ -337,10 +336,10 @@ export default function Home({ profitOnly }) {
           gainLossHeader(form["Buy Now Price"], form["Sell Now Price"])
         )}
         <h1 className="border-top main-title-flip">Top Flip Cards</h1>
-        <div className='refresh-button-container'>
+        <div className="refresh-button-container">
         </div>
         {resData?.map((r, i) =>
-          <div className='flex-container' key={i}>
+          <div className="flex-container" key={i}>
             <Accordian
             name={r.listing_name}
             rating={r.item.ovr}
@@ -372,7 +371,7 @@ export default function Home({ profitOnly }) {
       
       .info-icon {
         color: white;
-        ${!isHelpOpen && "display: none"}
+        display: ${!isHelpOpen ? "none": "block"};
         border: 2px solid white;
         border-radius: 60%;
         display: flex;
