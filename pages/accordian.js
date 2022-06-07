@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 
 const Accordian = ({name, rating, sellNowPrice, buyNowPrice, moneyMake, playerTeam, breakEven, img, onChange}) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -177,11 +177,11 @@ const Accordian = ({name, rating, sellNowPrice, buyNowPrice, moneyMake, playerTe
   const getTeamColor = (playerTeam) => {
     return teamHex.find(team => team.team === playerTeam)?.hex 
   }
-
+  
   const getTeamColor2 = (playerTeam) => {
-   return teamHex.find(team => team.team === playerTeam)?.hex2
+    return teamHex.find(team => team.team === playerTeam)?.hex2
   }
-
+  
   const toggleOverlay = (e) => {
     if (e?.target?.className.includes("info-icon")) {
       return

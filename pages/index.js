@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Accordian from './accordian';
 import Head from 'next/head';                                                                                                                                                                                                         
 
@@ -13,7 +13,7 @@ export const getServerSideProps = async () => {
         .then(data => {
           resolve(data.listings)
         })
-        .catch(err => reject(err))
+        .catch(err => console.log(err))
     })
     promises.push(p)
   }
@@ -41,11 +41,9 @@ export default function Home({ profitOnly }) {
   const [form, setForm] = useState({});
   const [areStatsOpen, setAreStatsOpen] = useState(false);
   const [isPurchased, setIsPurchased] = useState(false);
-  const [isSold, setIsSold] = useState(false);
   const [cardColor, setPlayerColor] = useState();
   const [isHelpOpen, setIsHelpOpen] = useState(false);
   const [noBuyNow, setNoBuyNow] = useState(false);
-  const [noSellNow, setNoSellNow] = useState(false);
  
 
   const handleChange = (cardColor) => {
@@ -325,7 +323,7 @@ export default function Home({ profitOnly }) {
       <Head>
         <title>MLB The Show Marketplace Tool</title>
         <link rel="preconnect" href="https://fonts.googleapis.com/" />
-        <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin/>
+        <link rel="preconnect" href="https://fonts.gstatic.com/" crossOrigin="true"/>
         <link 
           href="https://fonts.googleapis.com/css2?family=Raleway:wght@400&display=swap"
           rel="stylesheet"
