@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import Accordian from './accordian';
 import Head from 'next/head';                                                                                                                                                                                                         
 
@@ -13,7 +13,7 @@ export const getServerSideProps = async () => {
         .then(data => {
           resolve(data.listings)
         })
-        .catch(err => console.log(err))
+        .catch(err => reject(err))
     })
     promises.push(p)
   }
