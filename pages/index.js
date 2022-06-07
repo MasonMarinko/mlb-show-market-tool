@@ -173,7 +173,7 @@ export default function Home({ profitOnly }) {
             {!noBuyNow && <div className="stat-border left-items">
               <h1 className="entered-titles title-padding">{Math.sign(buySellDifference) === -1 ? "Expected Loss" : "Expected Profit"}</h1>
               <div className="border-bottom"></div>
-              <p className="result-text">{Math.sign(buySellDifference) === -1 ? "Losing:"  + "$" + Math.abs(buySellDifference).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',') : "Making: $" + Math.abs(buySellDifference).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</p>
+              <p className="result-text">{Math.sign(buySellDifference) === -1 ? "Losing: $" + Math.abs(buySellDifference).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',') : "Making: $" + Math.abs(buySellDifference).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</p>
             </div>}
             {noBuyNow !== true && 
             <div className="stat-border background-color">
