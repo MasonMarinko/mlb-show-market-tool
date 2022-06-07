@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import Accordian from './accordian';
+import Head from 'next/head';                                                                                                                                                                                                         
+
 
 
 export const getServerSideProps = async () => {
   const promises = []
-  for (let i = 1; i < 5; i++) {
+  for (let i = 1; i < 20; i++) {
     const p = new Promise((resolve, reject) => {
       fetch(`https://mlb22.theshow.com/apis/listings.json?&page=${i}`)
         .then(res => res.json())
@@ -42,6 +44,8 @@ export default function Home({ profitOnly }) {
   const [isSold, setIsSold] = useState(false);
   const [cardColor, setPlayerColor] = useState();
   const [isHelpOpen, setIsHelpOpen] = useState(false);
+  const [noBuyNow, setNoBuyNow] = useState(false);
+  const [noSellNow, setNoSellNow] = useState(false);
  
 
   const handleChange = (cardColor) => {
@@ -82,16 +86,19 @@ export default function Home({ profitOnly }) {
     if (sellNowPrice["Sell Now Price"] === "0") {
       alert("Sell Now Price is REQUIRED")
       return
-    } else if (!buyNowPrice) {
+    } else if (buyNowPrice["Buy Now Price"] === "0") {
       setForm({
-        "Sell Now Price": sellNowPrice["Sell Now Price"]
+        "Sell Now Price": sellNowPrice["Sell Now Price"],
+        "Buy Now Price": buyNowPrice["Buy Now Price"]
       })  
+      setNoBuyNow(true)
       setAreStatsOpen(true)
     } else {
       setForm({
         "Buy Now Price": buyNowPrice["Buy Now Price"],
         "Sell Now Price": sellNowPrice["Sell Now Price"]
       })
+      setNoBuyNow(false)
       setAreStatsOpen(true)
     }
   }
@@ -102,7 +109,6 @@ export default function Home({ profitOnly }) {
         ...buyNowPrice,
         "Final Purchased Price": e.target.value
       })
-
     } else {
       if (!e.target.value) {
         return
@@ -123,15 +129,14 @@ export default function Home({ profitOnly }) {
         "Buy Now Price": buyNowPrice["Final Purchased Price"],
         "Sell Now Price": form["Sell Now Price"]
       })
+      setNoBuyNow(false)
     } else if (sellNowPrice["Final Sold Price"] && !buyNowPrice["Final Purchased Price"]) {
-      setIsSold(true)
       setForm({
         "Sell Now Price": sellNowPrice["Final Sold Price"],
         "Buy Now Price": form["Buy Now Price"]
       })
     } else {
       setIsPurchased(true)
-      setIsSold(true)
       setForm({
         "Buy Now Price": buyNowPrice["Final Purchased Price"],
         "Sell Now Price": sellNowPrice["Final Sold Price"]
@@ -141,6 +146,8 @@ export default function Home({ profitOnly }) {
 
   const startOver = (e) => {
     e.preventDefault(e)
+    setBuyNowPrice({"Buy Now Price": "0"})
+    setSellNowPrice({"Sell Now Price": "0"})
     setAreStatsOpen(false)
     setForm({})
   }
@@ -156,7 +163,7 @@ export default function Home({ profitOnly }) {
             <div className="entered-values-container">
               <div className="stat-border left-items buy-now-left">
               <h1 className="title-padding entered-titles ">Buy Now Entered</h1>         
-              <p className="result-text">${form["Buy Now Price"].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</p>
+              <p className="result-text">${form["Buy Now Price"].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') || 0}</p>
               </div>
               <div className="stat-border">
               <h1 className="title-padding entered-titles">Sell Now Entered</h1>
@@ -165,37 +172,39 @@ export default function Home({ profitOnly }) {
             </div>
             <div className="entered-values-container">
 
-            {Math.sign(buySellDifference) === 1 && <div className="stat-border left-items">
-            <h1 className="entered-titles title-padding">{Math.sign(buySellDifference) === -1 ? "Money Lost" : "Money Made"}</h1>
-            <div className="border-bottom"></div>
-            <p className="result-text">{Math.sign(buySellDifference) === -1 ? "Losing:"  + "$" + Math.abs(buySellDifference).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',') : (isPurchased ? "Made: " : "Making: ") + "$" + Math.abs(buySellDifference).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</p>
+            {!noBuyNow && <div className="stat-border left-items">
+              <h1 className="entered-titles title-padding">{Math.sign(buySellDifference) === -1 ? "Expected Loss" : "Expected Profit"}</h1>
+              <div className="border-bottom"></div>
+              <p className="result-text">{Math.sign(buySellDifference) === -1 ? "Losing:"  + "$" + Math.abs(buySellDifference).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',') : "Making: $" + Math.abs(buySellDifference).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</p>
             </div>}
-            {!isPurchased && <div className="stat-border background-color">
+            {noBuyNow !== true && 
+            <div className="stat-border background-color">
             <h1 className="entered-titles title-padding">Recommendation</h1>
             <div className="border-bottom"></div>
-            <p className="result-text">{Math.sign(buySellDifference) === -1 ? "DON'T buy at " + "$" + buyPrice?.replace(/\B(?=(\d{3})+(?!\d))/g, ',') + " or higher" : "BUY at " + "$" + buyPrice?.replace(/\B(?=(\d{3})+(?!\d))/g, ',') + " or lower"}</p>
+            <p className="result-text">{buySellDifference < 1000 ? "DON'T BUY" : "BUY"}</p>
             </div>}
+            </div>
           </div>
-          </div>
-          {Math.sign(buySellDifference) === 1 &&
+          {/* {Math.sign(buySellDifference) === -1 && noBuyNow !== && */}
           <div className="stat-border-single">
            <h1 className="title-padding ">Break Even Price </h1>
              <p className="result-text">{"$" + breakEven.toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</p>
-            </div>}
+            </div>
+            {/* } */}
           <div className="purchase-input-title">
-          <h2 className="update-info-title">Purchase a card?</h2>
-          <h2 className="update-info-title">Enter Details here to get new calculations!</h2>
+          <h2 className="update-info-title">Card prices change?</h2>
+          <h2 className="update-info-title">Enter new details here to get new calculations!</h2>
           </div>
           <form className="form-styling" onSubmit={(e) => onPostPurchaseSubmit(e)}>
             <div className="input-container">
             <label className="input-labels buy-price">
               <div className="input-contain">
-              <input onChange={e => onPostPurchaseChange(e)} placeholder="Final Purchased Price" type="number" name="Final Sold Price" />
+              <input onChange={e => onPostPurchaseChange(e)} placeholder="Buy Now Price" type="number" name="Final Purchased Price" />
               </div>
             </label>
-            <label className='input-labels sell-price'>
+            <label className='input-labels buy-price'>
               <div className="input-contain">
-              <input onChange={e => onPostPurchaseChange(e)} placeholder="Final Sold Price" type="number" name="Final Purchased Price" />
+              <input onChange={e => onPostPurchaseChange(e)} placeholder="Sell Now Price" type="number" name="Final Sold Price" />
               </div>
               <div className="input-contain">
               <input className="submit-button" type="submit" value="Submit" />
@@ -207,6 +216,9 @@ export default function Home({ profitOnly }) {
             </div>
           </form>
           <style jsx>{`
+          body {
+            margin: 0;
+          }
           input {
             margin-bottom: 1rem;
               min-width: 15rem;
@@ -238,7 +250,7 @@ export default function Home({ profitOnly }) {
             margin: 0;
           }
           .background-color {
-            background-color: ${Math.sign(buySellDifference) === 1 ? "green ": "red"};
+            background-color: ${buySellDifference < 1000 ? "red": "green"};
           }
           .input-contain {
             display: flex;
@@ -310,12 +322,21 @@ export default function Home({ profitOnly }) {
 
   return (
     <div id="root">
+      <Head>
+        <title>MLB The Show Marketplace Tool</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com/" />
+        <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin/>
+        <link 
+          href="https://fonts.googleapis.com/css2?family=Raleway:wght@400&display=swap"
+          rel="stylesheet"
+        />
+      </Head>
       <div className="flex">
         <h1 className="main-title">Flip Calculator <div className = "icon-container"><button type="button" onClick={e=>toggleHelpText(e)} className="info-icon">!</button></div></h1>
 
         {isHelpOpen && <div onClick={e => toggleHelpText(e)} className="help-container">
-          <div className="help-text">In MLB The Show, you can submit Buy and Sell Orders. <br/><br/> When you see "Buy Now", you're actually seeing the lowest available price that someone has posted as a "Sell Order". <br/><br/>Alternately, if you see "Sell Now", you're
-          looking at the cheapest amount someone is posting they will pay on their "Buy Order". <br/><br/> For more information, checkout <a href="https://www.youtube.com/watch?v=ZfSel0u1Ws0">this video.</a></div>
+          <div className="help-text">In MLB The Show, you can submit Buy and Sell Orders. <br/><br/> When you see {`"`}Buy Now{`"`}, you{`'`}re actually seeing the lowest available price that someone has posted as a {`"`}Sell Order{`"`}. <br/><br/>Alternately, if you see {`"`}Sell Now{`"`}, you{`'`}re
+          looking at the cheapest amount someone is posting they will pay on their {`"`}Buy Order{`"`}. <br/><br/> For more information, checkout <a href="https://www.youtube.com/watch?v=ZfSel0u1Ws0">this video.</a></div>
          </div>}
         
         {!areStatsOpen && (
@@ -356,6 +377,7 @@ export default function Home({ profitOnly }) {
       </div>
       <style jsx>{`
       #root {
+        font-family: 'Raleway', sans-serif;
         height: 100% !important;
         display: flex;
         justify-content: center;

@@ -164,7 +164,6 @@ const Accordian = ({name, rating, sellNowPrice, buyNowPrice, moneyMake, playerTe
 
   const onMouseEnter = (playerTeam) => {
     onChange(teamHex.find(team => team.team === playerTeam).hex, true);
-
   }
 
   const onMouseLeave = (e) => {
@@ -176,11 +175,11 @@ const Accordian = ({name, rating, sellNowPrice, buyNowPrice, moneyMake, playerTe
   }
 
   const getTeamColor = (playerTeam) => {
-    return teamHex.find(team => team.team === playerTeam).hex 
+    return teamHex.find(team => team.team === playerTeam)?.hex 
   }
 
   const getTeamColor2 = (playerTeam) => {
-   return teamHex.find(team => team.team === playerTeam).hex2
+   return teamHex.find(team => team.team === playerTeam)?.hex2
   }
 
   const toggleOverlay = (e) => {
@@ -262,24 +261,6 @@ const Accordian = ({name, rating, sellNowPrice, buyNowPrice, moneyMake, playerTe
   </div>
 </div>
 <style jsx>{`
-
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-  }
-  
-  body {
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
-    font-size: 20px;
-    background: rgb(238, 174, 202);
-    background: radial-gradient(
-      circle,
-      rgba(238, 174, 202, 1) 0%,
-      rgba(199, 233, 148, 1) 100%
-    );
-  }
-  
   h1 {
     text-align: center;
     margin: 2rem 0 4rem 0;
@@ -349,7 +330,7 @@ const Accordian = ({name, rating, sellNowPrice, buyNowPrice, moneyMake, playerTe
     position: absolute;
     background-color: white;
     width: 23rem;
-    margin-bottom: 1.5rem;
+    margin-bottom: 4.1rem;
     border-radius: 15px;
     padding: .5rem;
     border: 2px solid black;
@@ -413,17 +394,14 @@ const Accordian = ({name, rating, sellNowPrice, buyNowPrice, moneyMake, playerTe
     color: white;
     border: 2px solid white;
     border-radius: 60%;
-    display: flex;
-    width: 20px;
-    height: 20px;
+    width: 22px;
+    height: 22px;
     background-color: black;
     cursor: pointer;
     position: absolute;
-    margin-left: 9.7rem;
+    margin-left: 9.8rem;
     font-weight: bold;
     z-index: 1;
-    justify-content: center;
-    padding-left: .1rem;
   }
 
   .buy-now {
