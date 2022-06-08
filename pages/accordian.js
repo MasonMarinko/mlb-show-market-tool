@@ -244,13 +244,12 @@ const CardPopUp = ({name, rating, sellNowPrice, buyNowPrice, moneyMake, playerTe
 </div>
 <style jsx>{`
   .flex-container {
-    min-width: 25rem;
+    min-width: 28rem;
     justify-content: center;
     display: flex;
     margin-bottom: 3rem;
     border: outset;
     border-radius: 20px;
-    margin: 2rem;
     cursor: pointer;
     box-shadow: 0 10px 16px 0 rgb(0 0 0 / 20%), 0 6px 20px 0 rgb(0 0 0 / 19%)
   }
@@ -383,6 +382,7 @@ const CardPopUp = ({name, rating, sellNowPrice, buyNowPrice, moneyMake, playerTe
   
   .accordian {
     display: flex;
+    min-width: 29rem;
   }
 
   .accordian-arrow {
