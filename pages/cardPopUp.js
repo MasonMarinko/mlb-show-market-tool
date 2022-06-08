@@ -182,25 +182,19 @@ const CardPopUp = ({name, rating, sellNowPrice, buyNowPrice, moneyMake, playerTe
     return teamHex.find(team => team.team === playerTeam)?.hex2
   }
   
-  const toggleAccordion = (e) => {
-    setIsOpen(!isOpen);
+  const toggleOverlay = (e) => {
+    if (e?.target?.className.includes("info-icon")) {
+      return
+    } else {
+      setIsOverlay(!isOverlay)
+      setIsHelpOpen(false);
+    }
   }
 
   return (
     <React.Fragment>
     <div className="accordian">
-  <div className="flex-container" onClick={e=>toggleAccordion(e)}>
-  <div className="card-info">
-    <div className= 'player-name card-info-spacing'>
-        <div className="name-rating-container">
-        <div>{name} ({rating}) </div>
-        <div className="spacer"></div>
-        {!isOpen && <div className="making-container">{"Making: " + "$" + Math.abs(moneyMake).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</div>}
-    </div>
-    {!isOpen ? <div className="accordian-arrow">{`>`}</div>:<div className="accordian-arrow-2">{`^`}</div>}
-    </div>
-          <div>
-        {isOpen &&     
+      {isOverlay && <div onClick={e=>toggleOverlay(e)} className="dark-overlay">
         <div className="overlay-container">
           <div className="overlay-img-container">
         <img className="overlay-card" src={img}></img>
@@ -238,20 +232,80 @@ const CardPopUp = ({name, rating, sellNowPrice, buyNowPrice, moneyMake, playerTe
          </div>
             </div>
           </div>
-        </div>}
-      </div>
+        </div>
+      </div>}
+  <div onClick={e=>toggleOverlay()} className="flex-container">
+  <div className="card-info">
+    <div className={`${isOpen && "border-bottom-cards"} player-name card-info-spacing`}>
+        <div>{name} ({rating}) </div>
+        <div className="spacer"></div>
+        {!isOpen && <div className="making-container">{"Making: " + "$" + Math.abs(moneyMake).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</div>}
+    </div>
+    <div>
+         {isOpen &&
+         <>
+         <div>
+         <div className="card-info-spacing">
+           Buy Now Price: ${buyNowPrice}
+         </div>
+         <div className="card-info-spacing">
+           Sell Now Price: ${sellNowPrice}
+         </div>
+         <div className="making-container">
+            {"Making: " + "$" + Math.abs(moneyMake).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+          </div>
+          </div>
+         </>
+         }
+        </div>
   </div>
 </div>
 <style jsx>{`
+  h1 {
+    text-align: center;
+    margin: 2rem 0 4rem 0;
+  }
+  
+  .accordian-title {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    cursor: pointer;
+  }
+  
+  .accordian-title,
+  .accordian-content {
+    padding: 1rem;
+  }
+  
+  .accordian-content {
+    background-color: #39b9d2;
+  }
+
+  .header-background {
+    background-color: black;
+    border-radius: 15px 15px 0 0;
+  }
+  
+  .sell-price input {
+    min-width: 15rem;
+    min-height: 2rem;
+  }
+  
+  .buy-price input {
+    margin-bottom: 2rem;
+    min-width: 15rem;
+    min-height: 2rem;
+  }
+  
   .flex-container {
+    width: 100%;
+    cursor: pointer;
     min-width: 25rem;
-    justify-content: center;
     display: flex;
     margin-bottom: 3rem;
     border: outset;
     border-radius: 20px;
-    margin: 2rem;
-    cursor: pointer;
     box-shadow: 0 10px 16px 0 rgb(0 0 0 / 20%), 0 6px 20px 0 rgb(0 0 0 / 19%)
   }
 
@@ -270,8 +324,6 @@ const CardPopUp = ({name, rating, sellNowPrice, buyNowPrice, moneyMake, playerTe
   
   .text-header {
     color: white;
-    background-color: black;
-    border-radius: 15px 15px 0 0;
   }
 
   .help-text {
@@ -283,18 +335,19 @@ const CardPopUp = ({name, rating, sellNowPrice, buyNowPrice, moneyMake, playerTe
     padding: .5rem;
     border: 2px solid black;
     font-size: 1.5rem;
+  
   }
   
-  // .help-container {
-  //   position: fixed;
-  //   top: 33px;
-  //   left: 0;
-  //   width: 100%;
-  //   height: 100%;
-  //   display: flex;
-  //   justify-content: center;
-  //   align-items: center;
-  // }
+  .help-container {
+    position: fixed;
+    top: 33px;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
 
   .equation-title {    
     display: flex;
@@ -304,26 +357,29 @@ const CardPopUp = ({name, rating, sellNowPrice, buyNowPrice, moneyMake, playerTe
   }
 
   .overlay-container {
+    height: 100%;
+    width: 100%;
     display: flex;
     flex-wrap: wrap;
-    margin: 0;
-    padding: 0;
-  }
-  
-  .overlay-img-container {
-    align-self: center;
-    display: flex;
-    padding: 10px;
-  }
-
-  .overlay-data-container {
-    display: flex;
-    flex-wrap: wrap;
-    padding: 10px;
   }
   
   .overlay-card {
     max-height: 20rem;
+    box-shadow: 0px 0px 25px 20px ${getTeamColor(playerTeam)};
+  }
+  
+  .overlay-img-container {
+    justify-content: center;
+    align-items: end;
+    display: flex;
+    width: 100%;
+  }
+
+  .overlay-data-container {
+    display: flex;
+    width: 100%;
+    flex-wrap: wrap;
+    justify-content: center;
   }
 
   .overlay-text {
@@ -332,10 +388,6 @@ const CardPopUp = ({name, rating, sellNowPrice, buyNowPrice, moneyMake, playerTe
 
   .equation-underline {
     text-decoration: underline;
-  }
-
-  .background-box {
-    padding-top: 30px;
   }
 
   .info-icon {
@@ -369,6 +421,18 @@ const CardPopUp = ({name, rating, sellNowPrice, buyNowPrice, moneyMake, playerTe
     justify-content: center;
   }
 
+  .background-box {
+    margin-top: 3rem;
+    max-height: 22rem;
+    max-width: 15rem;
+    box-shadow: 0px 0px 25px 15px ${getTeamColor2(playerTeam)};
+    border: 3px outset ${getTeamColor(playerTeam)};
+    padding: 15px;
+    background: white;
+    background-clip: padding-box;
+    border-radius: 15px;
+  }
+
   .dark-overlay {
     background-color: rgba(0, 0, 0, 0.75);
     position: fixed;
@@ -381,28 +445,22 @@ const CardPopUp = ({name, rating, sellNowPrice, buyNowPrice, moneyMake, playerTe
     align-items: center;
   }
   
-  .accordian {
-    display: flex;
-  }
-
-  .accordian-arrow {
-    align-self: center;
-    position: absolute;
-    margin-right: 20rem;
-  }
-
-  .accordian-arrow-2 {
-    align-self: center;
-    position: absolute;
-    margin-right: 20rem;
-    transform: rotate(180deg);
-  }
+    .accordian-arrow {
+      display: flex;
+      position: absolute;
+      padding-left: 2rem;
+    }
 
   
   .form-styling {
     width: 100%;
     padding-bottom: 5rem;
     text-align: center;
+  }
+  
+  .flex-container:hover {
+    transition: all 500ms ease-out;
+    box-shadow: 0px 0px 25px 5px ${getTeamColor(playerTeam)};
   }
   
   .money-back {
@@ -414,9 +472,9 @@ const CardPopUp = ({name, rating, sellNowPrice, buyNowPrice, moneyMake, playerTe
   }
   
   .card-info {
+    width: 100%;
     text-align: center;
     border-radius: 20px;
-    display: unset;
   }
 
   .card-info-spacing {
@@ -433,7 +491,6 @@ const CardPopUp = ({name, rating, sellNowPrice, buyNowPrice, moneyMake, playerTe
     .player-name {
         font-size: 1.7rem;
         font-weight: bold;
-        display: flex;
     }
   
     .border-bottom-cards {

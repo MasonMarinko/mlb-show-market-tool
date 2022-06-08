@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import CardPopUp from './cardPopUp';
 import Accordian from './accordian';
 import Head from 'next/head';                                                                                                                                                                                                         
 
@@ -44,12 +45,19 @@ export default function Home({ profitOnly }) {
   const [cardColor, setPlayerColor] = useState();
   const [isHelpOpen, setIsHelpOpen] = useState(false);
   const [noBuyNow, setNoBuyNow] = useState(false);
- 
+  const [isMobile, setIsMobile] = useState(false);
 
-  const handleChange = (cardColor) => {
-    setPlayerColor(cardColor)
-  }
 
+  useEffect(() => {
+    function handleResize() {
+      if (window.innerWidth < 600) {
+        setIsMobile(true)
+      } else if (window.innerWidth > 600) {
+        setIsMobile(false)
+      }
+}
+    window.addEventListener('resize', handleResize)
+  })
   
   const breakEven = (bestBuyPrice) => {
     return bestBuyPrice/(.90)
@@ -359,6 +367,8 @@ export default function Home({ profitOnly }) {
         </div>
         {resData?.map((r, i) =>
           <div className="flex-container" key={i}>
+            {!isMobile ?
+            <>
             <Accordian
             name={r.listing_name}
             rating={r.item.ovr}
@@ -368,8 +378,23 @@ export default function Home({ profitOnly }) {
             breakEven={breakEven(r.best_buy_price)}
             playerTeam={r.item.team}
             img={r?.item.img}
-            onChange={handleChange}
+            // onChange={handleChange}
             />
+            </>
+            :
+            <>
+            <CardPopUp
+            name={r.listing_name}
+            rating={r.item.ovr}
+            sellNowPrice={r.best_buy_price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+            buyNowPrice={r.best_sell_price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+            moneyMake={gainLossCards(r.best_sell_price, r.best_buy_price)}
+            breakEven={breakEven(r.best_buy_price)}
+            playerTeam={r.item.team}
+            img={r?.item.img}
+            />
+            </>
+            }
           </div>
         )}
       </div>
