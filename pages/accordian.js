@@ -77,8 +77,8 @@ const Accordian = ({name, rating, sellNowPrice, buyNowPrice, moneyMake, playerTe
     },
     {
       team: "Yankees",
-      hex: "#c4ced3",
-      hex2: "#122448"
+      hex: "#122448",
+      hex2: "#c4ced3"
     },
     {
       team: "Royals",
