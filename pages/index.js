@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import CardPopUp from './cardPopUp';
 import Accordian from './accordian';
 import Head from 'next/head';                                                                                                                                                                                                         
 
@@ -47,17 +46,6 @@ export default function Home({ profitOnly }) {
   const [noBuyNow, setNoBuyNow] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
 
-
-  useEffect(() => {
-    function handleResize() {
-      if (window.innerWidth < 600) {
-        setIsMobile(true)
-      } else if (window.innerWidth > 600) {
-        setIsMobile(false)
-      }
-}
-    window.addEventListener('resize', handleResize)
-  })
   
   const breakEven = (bestBuyPrice) => {
     return bestBuyPrice/(.90)
@@ -222,9 +210,6 @@ export default function Home({ profitOnly }) {
             </div>
           </form>
           <style jsx>{`
-          body {
-            margin: 0;
-          }
           input {
             margin-bottom: 1rem;
               min-width: 15rem;
@@ -367,8 +352,6 @@ export default function Home({ profitOnly }) {
         </div>
         {resData?.map((r, i) =>
           <div className="flex-container" key={i}>
-            {!isMobile ?
-            <>
             <Accordian
             name={r.listing_name}
             rating={r.item.ovr}
@@ -380,24 +363,14 @@ export default function Home({ profitOnly }) {
             img={r?.item.img}
             // onChange={handleChange}
             />
-            </>
-            :
-            <>
-            <CardPopUp
-            name={r.listing_name}
-            rating={r.item.ovr}
-            sellNowPrice={r.best_buy_price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-            buyNowPrice={r.best_sell_price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-            moneyMake={gainLossCards(r.best_sell_price, r.best_buy_price)}
-            breakEven={breakEven(r.best_buy_price)}
-            playerTeam={r.item.team}
-            img={r?.item.img}
-            />
-            </>
-            }
           </div>
         )}
       </div>
+      <style jsx global>{`
+        body {
+          margin: 0;
+        }
+      `}</style>
       <style jsx>{`
       #root {
         font-family: 'Raleway', sans-serif;

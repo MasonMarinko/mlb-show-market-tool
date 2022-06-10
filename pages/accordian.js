@@ -162,14 +162,6 @@ const CardPopUp = ({name, rating, sellNowPrice, buyNowPrice, moneyMake, playerTe
     }
   ]
 
-  // const onMouseEnter = (playerTeam) => {
-  //   onChange(teamHex.find(team => team.team === playerTeam).hex, true);
-  // }
-
-  // const onMouseLeave = (e) => {
-  //   onChange(null, false)
-  // }
-
   const toggleHelpText = () => {
     setIsHelpOpen(!isHelpOpen);
   }
@@ -195,12 +187,14 @@ const CardPopUp = ({name, rating, sellNowPrice, buyNowPrice, moneyMake, playerTe
         <div className="name-rating-container">
         <div>{name} ({rating}) </div>
         <div className="spacer"></div>
-        {!isOpen && <div className="making-container">{"Making: " + "$" + Math.abs(moneyMake).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</div>}
+        {!isOpen && <div className="making-container">{"Making: " + "$" + Math.abs(moneyMake).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+        </div>}
     </div>
     {!isOpen ? <div className="accordian-arrow">{`>`}</div>:<div className="accordian-arrow-2">{`^`}</div>}
     </div>
           <div>
         {isOpen &&     
+        <div className="dark-overlay">
         <div className="overlay-container">
           <div className="overlay-img-container">
         <img className="overlay-card" src={img}></img>
@@ -238,6 +232,7 @@ const CardPopUp = ({name, rating, sellNowPrice, buyNowPrice, moneyMake, playerTe
          </div>
             </div>
           </div>
+        </div>
         </div>}
       </div>
   </div>
@@ -245,6 +240,7 @@ const CardPopUp = ({name, rating, sellNowPrice, buyNowPrice, moneyMake, playerTe
 <style jsx>{`
   .flex-container {
     min-width: 28rem;
+    min-height: 72px;
     justify-content: center;
     display: flex;
     margin-bottom: 3rem;
@@ -323,6 +319,7 @@ const CardPopUp = ({name, rating, sellNowPrice, buyNowPrice, moneyMake, playerTe
   
   .overlay-card {
     max-height: 20rem;
+    background-image: linear-gradient(to top, ${getTeamColor2(playerTeam)}, ${getTeamColor(playerTeam)});
   }
 
   .overlay-text {
@@ -367,22 +364,9 @@ const CardPopUp = ({name, rating, sellNowPrice, buyNowPrice, moneyMake, playerTe
     display: flex;
     justify-content: center;
   }
-
-  .dark-overlay {
-    background-color: rgba(0, 0, 0, 0.75);
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
   
   .accordian {
     display: flex;
-    min-width: 29rem;
   }
 
   .accordian-arrow {
@@ -607,7 +591,7 @@ const CardPopUp = ({name, rating, sellNowPrice, buyNowPrice, moneyMake, playerTe
     font-size:30px;
     color:red;
   }
-  
+
   .making-header {
     padding: 0;
     margin: 0;
@@ -619,6 +603,416 @@ const CardPopUp = ({name, rating, sellNowPrice, buyNowPrice, moneyMake, playerTe
   .bottom-border {
     border-bottom: solid thin darkGray;
     padding-top: 2rem;
+  }
+  @media screen and (max-width: 751px) {
+    h1 {
+      text-align: center;
+      margin: 2rem 0 4rem 0;
+    }
+    
+    .accordian-title {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      cursor: pointer;
+    }
+    
+    .accordian-title,
+    .accordian-content {
+      padding: 1rem;
+    }
+    
+    .accordian-content {
+      background-color: #39b9d2;
+    }
+  
+    .header-background {
+      background-color: black;
+      border-radius: 15px 15px 0 0;
+    }
+    
+    .sell-price input {
+      min-width: 15rem;
+      min-height: 2rem;
+    }
+
+    .accordian-arrow {
+      display: none;
+    }
+  
+    .accordian-arrow-2 {
+      display: none;
+    }
+    
+    .buy-price input {
+      margin-bottom: 2rem;
+      min-width: 15rem;
+      min-height: 2rem;
+    }
+  
+    
+    .math-title {
+      display: flex;
+      font-size: 2.0rem;
+      justify-content: center;
+      font-weight: bold;
+      text-decoration: underline;
+    }
+  
+    .data-overlay {
+      font-size: 16rem;
+    }
+    
+    .text-header {
+      color: white;
+    }
+  
+    .help-text {
+      position: absolute;
+      background-color: white;
+      width: 23rem;
+      margin-bottom: 4.1rem;
+      border-radius: 15px;
+      padding: .5rem;
+      border: 2px solid black;
+      font-size: 1.5rem;
+    
+    }
+    
+    .help-container {
+      position: fixed;
+      top: 33px;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+  
+    .equation-title {    
+      display: flex;
+      justify-content: end;
+      padding-right: 3rem;
+      flex-wrap: wrap;
+    }
+  
+    .overlay-container {
+      height: 100%;
+      width: 100%;
+      display: flex;
+      flex-wrap: wrap;
+      align-content: center;
+    }
+    
+    .overlay-card {
+      max-height: 20rem;
+      box-shadow: 0px 0px 25px 20px ${getTeamColor(playerTeam)};
+      border: 5px double ${getTeamColor2(playerTeam)};
+    }
+    
+    .overlay-img-container {
+      justify-content: center;
+      align-items: end;
+      display: flex;
+      width: 100%;
+    }
+  
+    .overlay-data-container {
+      display: flex;
+      width: 100%;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+  
+    .overlay-text {
+      display: flex;
+    }
+  
+    .equation-underline {
+      text-decoration: underline;
+    }
+  
+    .info-icon {
+      color: white;
+      border: 2px solid white;
+      border-radius: 60%;
+      width: 22px;
+      height: 22px;
+      background-color: black;
+      cursor: pointer;
+      position: absolute;
+      margin-left: 9.8rem;
+      font-weight: bold;
+      z-index: 1;
+    }
+  
+    .buy-now {
+      border: 1px solid black;
+      border-radius: 15px;
+      min-width: 12rem;
+      margin-bottom: 1.7rem;
+    }
+  
+    .sell-now {
+      display: flex;
+      justify-content: center;
+    }
+  
+    .money-make {
+      display: flex;
+      justify-content: center;
+    }
+  
+    .background-box {
+      margin-top: 3rem;
+      max-height: 22rem;
+      max-width: 15rem;
+      box-shadow: 0px 0px 25px 15px ${getTeamColor2(playerTeam)};
+      border: 3px outset ${getTeamColor(playerTeam)};
+      padding: 15px;
+      background: white;
+      background-clip: padding-box;
+      border-radius: 15px;
+    }
+  
+    .dark-overlay {
+      background-color: rgba(0, 0, 0, 0.75);
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    
+    .form-styling {
+      width: 100%;
+      padding-bottom: 5rem;
+      text-align: center;
+    }
+    
+    .flex-container:hover {
+      transition: all 500ms ease-out;
+      box-shadow: 0px 0px 25px 5px ${getTeamColor(playerTeam)};
+    }
+    
+    .money-back {
+      font-size:10px;
+    }
+    
+    .cart-image {
+      align-self: center;
+    }
+    
+    .card-info {
+      width: 100%;
+      text-align: center;
+      border-radius: 20px;
+    }
+  
+    .card-info-spacing {
+          font-weight: bold;
+          font-size: 1.5rem;
+          text-align: center;
+          justify-content: center;
+    } 
+    
+      .making-info-spacing {
+          margin-top: 1.5rem;
+      }
+    
+      .player-name {
+          font-size: 1.7rem;
+          font-weight: bold;
+      }
+    
+      .border-bottom-cards {
+          border-bottom: 1px solid black;
+      }
+    
+    h2 {
+      margin-bottom:0;
+      padding-top: 1rem;
+    }
+    
+    .stats-container {
+      width: 100%;
+      padding-top: 1rem;
+      padding-bottom: 3rem;
+      text-align: center;
+    }
+      .stats-container h1 {
+          font-size: 50px;
+      }
+    
+    
+    .breakEven-price {
+      color: green;
+      text-decoration: none;
+    }
+  
+    .break-even-title {
+      font-size: 2.2rem;
+    }
+    
+    .losing-container {
+      padding: 0;
+      margin: 0;
+      font-weight: bold;
+      font-size:30px;
+      color:red;
+    }
+      .losing-container h3 {
+          color:black;
+          margin-bottom: 0;
+      }
+    
+    
+    .making-container {
+      padding: 0;
+      margin: 0;
+      font-weight: bold;
+      font-size: 30px;
+      color: green;
+      text-align: center;
+    }
+    
+      .making-container h3 {
+          color:black;
+          margin-bottom: 0;
+      }
+    
+    .breakEven {
+      color: green;
+      font-size: 1.1rem;
+      padding-top: 2rem;
+    }
+    
+    .border-bottom {
+      border-bottom: 1px solid black;
+      margin: 0 600px 0 600px;
+    }
+    
+    .timer-data {
+      font-size: 20px;
+    }
+    
+    .underline {
+      text-decoration: underline;
+    }
+    
+    .useful-title {
+      margin-bottom: 40px;
+    }
+    
+    .main-title {
+      display: flex;
+      justify-content: center;
+      text-align: center;
+      margin-bottom: 0;
+      font-size: 34px;
+    }
+    
+    .secondary-title {
+      display: flex;
+      justify-content: space-around;
+      text-align: center;
+      font-size: 18px;
+      margin: 0;
+      padding: 0 0 1rem 0;
+      color: red;
+    }
+    
+    .refresh-button-container {
+      display: flex;
+      justify-content: space-around;
+      padding: 0 0 2.5rem 0;
+      margin: 0;
+    }
+    
+    .title-padding-top {
+      padding-top: 3rem;
+      margin: 0px;
+    }
+    
+    .entered-values-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    
+      .entered-values-container h3 {
+          margin-top: 0;
+          padding-right: 1rem;
+      }
+    
+      .entered-values-container p {
+          align-items: center;
+          margin: 0;
+          padding-right:4rem;
+      }
+    
+    .refresh-button {
+      margin-top:0;
+      padding: 10px 40px 10px 40px;
+    }
+    
+    .form-styling {
+      padding-top: 15px;
+      padding-bottom: 50px;
+      border-bottom: solid 1px black;
+    }
+    
+      .submit-button {
+          padding: 10px 50px 10px 50px;
+      }
+      .input-labels {
+          padding-right: 1rem;
+      }
+    
+    .update-info-title {
+      padding-top: 75px;
+    }
+    
+    .startOver-button-container {
+      min-width: 100%;
+    }
+    
+    .startOver-button {
+      margin-top: 2rem;
+      padding: 10px 50px 10px 50px;
+    }
+    
+    .parentheses-text {
+      font-size: 1.2rem;
+      margin-top: 0px;
+      color: black;
+      margin:0 0 5px 0;
+    }
+    
+    .losing-header {
+      padding: 0;
+      margin: 0;
+      font-weight: bold;
+      font-size:30px;
+      color:red;
+    }
+    
+    .making-header {
+      padding: 0;
+      margin: 0;
+      font-weight: bold;
+      font-size:30px;
+      color:green;
+    }
+    
+    .bottom-border {
+      border-bottom: solid thin darkGray;
+      padding-top: 2rem;
+    }
   }
 `}</style>
     </div>
