@@ -224,7 +224,6 @@ export default function Home({ profitOnly }) {
           .result-text {
             font-size: 1.2rem;
             display: flex;
-            font-weight: bold;
             flex-wrap: wrap;
             max-width: 14rem;
             justify-content: center;
@@ -477,6 +476,15 @@ export default function Home({ profitOnly }) {
           width: calc(100% - 250px);
         }
      }
+     @media screen and (max-width: 690px) {
+        #root {
+          justify-content: unset ;
+        }
+        input {
+          margin-bottom: 2.2rem;
+        }
+     }
+
       `}</style>
     </div>
   );

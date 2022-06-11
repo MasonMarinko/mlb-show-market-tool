@@ -162,8 +162,11 @@ const CardPopUp = ({name, rating, sellNowPrice, buyNowPrice, moneyMake, playerTe
     }
   ]
 
-  const toggleHelpText = () => {
-    setIsHelpOpen(!isHelpOpen);
+  const toggleHelpText = (e) => {
+    console.log(e.target.name)
+    if (e.target.name === "help-icon") {
+      setIsHelpOpen(!isHelpOpen);
+    }
   }
 
   const getTeamColor = (playerTeam) => {
@@ -175,13 +178,18 @@ const CardPopUp = ({name, rating, sellNowPrice, buyNowPrice, moneyMake, playerTe
   }
   
   const toggleAccordion = (e) => {
+    if (e.target.name === "help-icon") {
+    setIsOpen(true);
+  } else {
     setIsOpen(!isOpen);
+    setIsHelpOpen(false)
   }
+}
 
   return (
     <React.Fragment>
     <div className="accordian">
-  <div className="flex-container" onClick={e=>toggleAccordion(e)}>
+  <div className="flex-container" name="accordian-expand" onClick={e=>toggleAccordion(e)}>
   <div className="card-info">
     <div className= 'player-name card-info-spacing'>
         <div className="name-rating-container">
@@ -215,7 +223,7 @@ const CardPopUp = ({name, rating, sellNowPrice, buyNowPrice, moneyMake, playerTe
          </div>
          <div className="buy-now">
          <div className="header-background">
-         <div className="text-header card-info-spacing overlay-text">Break Even:<button type="button" onClick={e=>toggleHelpText(e)} className="info-icon">!</button></div>
+         <div className="text-header card-info-spacing overlay-text">Break Even:<button type="button" onClick={e=>toggleHelpText(e)} name = "help-icon" className="info-icon">!</button></div>
          <div className="help-container">
          {isHelpOpen && <div className="help-text">If card was bought for ${sellNowPrice} (the current purchase price) this represents the lowest you should sell the card for to break even after the 10% commission.<br/><br/>
          <span className = "math-title">MATH BREAKDOWN:</span><br/>
@@ -273,11 +281,13 @@ const CardPopUp = ({name, rating, sellNowPrice, buyNowPrice, moneyMake, playerTe
     position: absolute;
     background-color: white;
     width: 23rem;
-    margin-bottom: 4.1rem;
     border-radius: 15px;
     padding: .5rem;
+    z-index: 1;
     border: 2px solid black;
     font-size: 1.5rem;
+    margin-left: -11rem;
+    margin-top: -0.5rem;
   }
   
   // .help-container {
@@ -671,12 +681,13 @@ const CardPopUp = ({name, rating, sellNowPrice, buyNowPrice, moneyMake, playerTe
       position: absolute;
       background-color: white;
       width: 23rem;
-      margin-bottom: 4.1rem;
+      z-index: 1;
       border-radius: 15px;
       padding: .5rem;
       border: 2px solid black;
       font-size: 1.5rem;
-    
+      margin-right: -11rem;
+      margin-bottom: 2rem;
     }
     
     .help-container {
