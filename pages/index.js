@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import Accordian from './accordian';
+import Accordion from './accordion';
 import Head from 'next/head';                                                                                                                                                                                                         
 
 
@@ -41,10 +41,9 @@ export default function Home({ profitOnly }) {
   const [form, setForm] = useState({});
   const [areStatsOpen, setAreStatsOpen] = useState(false);
   const [isPurchased, setIsPurchased] = useState(false);
-  const [cardColor, setPlayerColor] = useState();
   const [isHelpOpen, setIsHelpOpen] = useState(false);
   const [noBuyNow, setNoBuyNow] = useState(false);
-  
+
   const breakEven = (bestBuyPrice) => {
     return bestBuyPrice/(.90)
   }
@@ -57,7 +56,6 @@ export default function Home({ profitOnly }) {
   const toggleHelpText = () => {
     setIsHelpOpen(!isHelpOpen);
   }
-
 
   const onFieldChange = (e) => {
     if (e.target.name === "Buy Now Price") {
@@ -217,6 +215,7 @@ export default function Home({ profitOnly }) {
             margin-bottom: 1rem;
               min-width: 15rem;
               min-height: 2rem;
+              
           }
           .left-items {
             margin-right: 0;
@@ -315,17 +314,9 @@ export default function Home({ profitOnly }) {
 
   return (
     <div id="root">
-      <Head>
-        <title>MLB The Show Marketplace Tool</title>
-        <link rel="preconnect" href="https://fonts.googleapis.com/" />
-        <link rel="preconnect" href="https://fonts.gstatic.com/" crossOrigin="true"/>
-        <link 
-          href="https://fonts.googleapis.com/css2?family=Raleway:wght@400&display=swap"
-          rel="stylesheet"
-        />
-      </Head>
       <div className="flex">
-        <h1 className="main-title">Flip Calculator <div className = "icon-container"><button type="button" onClick={e=>toggleHelpText(e)} className="info-icon">!</button></div></h1>
+        <h1 className="main-title">
+        <img src="https://i.imgur.com/b2rFbLh.png"></img><span className="flip-calc-title">Flip Calculator</span> <div className = "icon-container"><button type="button" onClick={e=>toggleHelpText(e)} className="info-icon">!</button></div></h1>
 
         {isHelpOpen && <div onClick={e => toggleHelpText(e)} className="help-container">
           <div className="help-text">In MLB The Show, you can submit Buy and Sell Orders. <br/><br/> When you see {`"`}Buy Now{`"`}, you{`'`}re actually seeing the lowest available price that someone has posted as a {`"`}Sell Order{`"`}. <br/><br/>Alternately, if you see {`"`}Sell Now{`"`}, you{`'`}re
@@ -353,8 +344,8 @@ export default function Home({ profitOnly }) {
         <div className="refresh-button-container">
         </div>
         {resData?.map((r, i) =>
-          <div className="flex-container" key={i}>
-            <Accordian
+          <div className="accordion-container" key={i}>
+            <Accordion
             name={r.listing_name}
             rating={r.item.ovr}
             sellNowPrice={r.best_buy_price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
@@ -363,7 +354,6 @@ export default function Home({ profitOnly }) {
             breakEven={breakEven(r.best_buy_price)}
             playerTeam={r.item.team}
             img={r?.item.img}
-            // onChange={handleChange}
             />
           </div>
         )}
@@ -371,24 +361,22 @@ export default function Home({ profitOnly }) {
       <style jsx global>{`
         body {
           margin: 0;
+          background-color: #141922;
         }
       `}</style>
       <style jsx>{`
       #root {
-        font-family: 'Raleway', sans-serif;
+        font-family: roboto, sans-serif;
         height: 100% !important;
         display: flex;
-        justify-content: center;
+        justify-content: unset ;
       }
       .flex {
         display: flex;
-        background-color: azure;
         flex-wrap: wrap;
         justify-content: space-around;
-        transition: all 500ms ease-out;
-        box-shadow: 0px 0px 25px 15px ${cardColor}
       }
-      
+
       .info-icon {
         color: white;
         display: ${!isHelpOpen ? "none": "block"};
@@ -403,28 +391,43 @@ export default function Home({ profitOnly }) {
         font-size: 1.6rem;
         justify-content: center;
         align-items: center;
+        position: absolute;
+        margin-top: 12rem;
+        margin-right: 31rem;
       }
       .icon-container {
         display: flex;
         flex-wrap: wrap;
         justify-content: center;
       }
+
+      .flip-calc-title {
+        position: absolute;
+        min-width: 100%;
+        font-size: 53px;
+        margin-top: 7.9rem;
+        margin-right: 7.7rem;
+      }
       
       input {
         margin-bottom: 2rem;
-        min-width: 25rem;
-        min-height: 2rem;
+        min-width: 27rem;
+        min-height: 3rem;
+        font-size: 21px;
       }
       .form-styling {
         text-align: center;
       }
       .main-title {
+        color: white;
         min-width: 100%;
         justify-content: center;
         text-align: center;
         margin-top: 1rem;
         margin-bottom: 1rem;
         font-size: 4rem;
+        display: flex;
+        padding-bottom: 4rem;
       }
 
       .border-top {
@@ -471,17 +474,15 @@ export default function Home({ profitOnly }) {
         padding: 0 0 2.5rem 0;
         margin: 0;
       }
-      @media screen and (min-width: 751px) {
-        .flex {
-          width: calc(100% - 250px);
-        }
-     }
-     @media screen and (max-width: 690px) {
+     @media screen and (min-width: 690px) {
         #root {
-          justify-content: unset ;
+          justify-content: center;
         }
         input {
           margin-bottom: 2.2rem;
+        }
+        .flip-calc-title {
+          font-size: 55px;
         }
      }
 

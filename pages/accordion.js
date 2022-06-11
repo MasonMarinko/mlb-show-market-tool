@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from "react";
 
-const CardPopUp = ({name, rating, sellNowPrice, buyNowPrice, moneyMake, playerTeam, breakEven, img, onChange}) => {
-  const [isOpen, setIsOpen] = useState(false);
+const Accordion = ({name, rating, sellNowPrice, buyNowPrice, moneyMake, playerTeam, breakEven, img, setIsAccOpen}) => {
+  const [isAccordionOpen, setIsAccordionOpen] = useState(false);
   const [isOverlay, setIsOverlay] = useState(false);
   const [isHelpOpen, setIsHelpOpen] = useState(false);
   const teamHex = [
@@ -162,13 +162,13 @@ const CardPopUp = ({name, rating, sellNowPrice, buyNowPrice, moneyMake, playerTe
     }
   ]
 
+  
   const toggleHelpText = (e) => {
-    console.log(e.target.name)
     if (e.target.name === "help-icon") {
       setIsHelpOpen(!isHelpOpen);
     }
   }
-
+  
   const getTeamColor = (playerTeam) => {
     return teamHex.find(team => team.team === playerTeam)?.hex 
   }
@@ -179,29 +179,29 @@ const CardPopUp = ({name, rating, sellNowPrice, buyNowPrice, moneyMake, playerTe
   
   const toggleAccordion = (e) => {
     if (e.target.name === "help-icon") {
-    setIsOpen(true);
-  } else {
-    setIsOpen(!isOpen);
-    setIsHelpOpen(false)
+      setIsAccordionOpen(true);
+    } else {
+      setIsAccordionOpen(!isAccordionOpen);
+      setIsHelpOpen(false)
+    }
   }
-}
 
   return (
     <React.Fragment>
-    <div className="accordian">
-  <div className="flex-container" name="accordian-expand" onClick={e=>toggleAccordion(e)}>
+    <div className="accordion">
+  <div className={isAccordionOpen ? "flex-container" : "other-flex-container"} onClick={e=>toggleAccordion(e)}>
   <div className="card-info">
     <div className= 'player-name card-info-spacing'>
         <div className="name-rating-container">
-        <div>{name} ({rating}) </div>
+        <div className="name-rating-text">{name} ({rating}) </div>
         <div className="spacer"></div>
-        {!isOpen && <div className="making-container">{"Making: " + "$" + Math.abs(moneyMake).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+        {!isAccordionOpen && <div className="making-container">{"Making: " + "$" + Math.abs(moneyMake).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
         </div>}
     </div>
-    {!isOpen ? <div className="accordian-arrow">{`>`}</div>:<div className="accordian-arrow-2">{`^`}</div>}
+    {!isAccordionOpen ? <div className="accordion-arrow">{`>`}</div>:<div className="accordion-arrow-2">{`^`}</div>}
     </div>
           <div>
-        {isOpen &&     
+        {isAccordionOpen &&     
         <div className="dark-overlay">
         <div className="overlay-container">
           <div className="overlay-img-container">
@@ -247,16 +247,70 @@ const CardPopUp = ({name, rating, sellNowPrice, buyNowPrice, moneyMake, playerTe
 </div>
 <style jsx>{`
   .flex-container {
+    background: lightgray;
+    color: white;
     min-width: 28rem;
     min-height: 72px;
     justify-content: center;
     display: flex;
     margin-bottom: 3rem;
-    border: outset;
-    border-radius: 20px;
+    background-color: #fffffff;
     cursor: pointer;
+    border-radius: 8px;
     box-shadow: 0 10px 16px 0 rgb(0 0 0 / 20%), 0 6px 20px 0 rgb(0 0 0 / 19%)
   }
+
+  .other-flex-container {
+    background: lightgray;
+    color: white;
+    min-width: 28rem;
+    min-height: 72px;
+    justify-content: center;
+    display: flex;
+    margin-bottom: 3rem;
+    cursor: pointer;
+    border-radius: 8px;
+    box-shadow: 0 10px 16px 0 rgb(0 0 0 / 20%), 0 6px 20px 0 rgb(0 0 0 / 19%)
+  }
+
+  .other-flex-container:hover {
+    background: linear-gradient(70.88deg, ${getTeamColor2(playerTeam)} 7.16%, ${getTeamColor(playerTeam)} 15.16%,lightgrey 15.89%);
+    background-size: 125%;
+    animation: closed-gradient 1s forwards;
+    box-shadow: rgba(80, 63, 205, 0.5) 0 1px 30px;
+  }
+
+  @keyframes closed-gradient {
+    0% {
+      background-position: 100% 0%;
+    }
+    50% {
+      background-position: 100% 20%;
+    }
+    100% {
+      background-position: 0% 50%;
+    }
+  }
+
+  .flex-container:hover {
+    background: linear-gradient(70.88deg, ${getTeamColor2(playerTeam)} 16.16%, ${getTeamColor(playerTeam)} 30.16%,lightgrey 15.89%);
+    background-size: 158%;
+    animation: open-gradient 1s forwards;
+    box-shadow: rgba(80, 63, 205, 0.5) 0 1px 30px;
+  }
+  
+  @keyframes open-gradient {
+    0% {
+      background-position: 100% 0%;
+    }
+    50% {
+      background-position: 100% 20%;
+    }
+    100% {
+      background-position: 0% 50%;
+    }
+  }
+  
 
   
   .math-title {
@@ -288,18 +342,8 @@ const CardPopUp = ({name, rating, sellNowPrice, buyNowPrice, moneyMake, playerTe
     font-size: 1.5rem;
     margin-left: -11rem;
     margin-top: -0.5rem;
+    color: black;
   }
-  
-  // .help-container {
-  //   position: fixed;
-  //   top: 33px;
-  //   left: 0;
-  //   width: 100%;
-  //   height: 100%;
-  //   display: flex;
-  //   justify-content: center;
-  //   align-items: center;
-  // }
 
   .equation-title {    
     display: flex;
@@ -329,7 +373,6 @@ const CardPopUp = ({name, rating, sellNowPrice, buyNowPrice, moneyMake, playerTe
   
   .overlay-card {
     max-height: 20rem;
-    background-image: linear-gradient(to top, ${getTeamColor2(playerTeam)}, ${getTeamColor(playerTeam)});
   }
 
   .overlay-text {
@@ -338,10 +381,6 @@ const CardPopUp = ({name, rating, sellNowPrice, buyNowPrice, moneyMake, playerTe
 
   .equation-underline {
     text-decoration: underline;
-  }
-
-  .background-box {
-    padding-top: 30px;
   }
 
   .info-icon {
@@ -353,9 +392,10 @@ const CardPopUp = ({name, rating, sellNowPrice, buyNowPrice, moneyMake, playerTe
     background-color: black;
     cursor: pointer;
     position: absolute;
-    margin-left: 9.8rem;
+    margin-left: 10.1rem;
     font-weight: bold;
     z-index: 1;
+    margin-top: 0.1rem;
   }
 
   .buy-now {
@@ -375,23 +415,29 @@ const CardPopUp = ({name, rating, sellNowPrice, buyNowPrice, moneyMake, playerTe
     justify-content: center;
   }
   
-  .accordian {
+  .accordion {
     display: flex;
   }
 
-  .accordian-arrow {
+  .accordion-arrow {
     align-self: center;
     position: absolute;
-    margin-right: 20rem;
+    margin-right: 24rem;
   }
 
-  .accordian-arrow-2 {
+  .accordion-arrow-2 {
     align-self: center;
     position: absolute;
-    margin-right: 20rem;
+    margin-right: 24rem;
     transform: rotate(180deg);
+    margin-top: 1rem;
   }
 
+  .name-rating-text {
+    color: black;
+    padding-bottom: 4px;
+    ${isAccordionOpen && "font-size:35px"}
+  }
   
   .form-styling {
     width: 100%;
@@ -619,20 +665,33 @@ const CardPopUp = ({name, rating, sellNowPrice, buyNowPrice, moneyMake, playerTe
       text-align: center;
       margin: 2rem 0 4rem 0;
     }
+
+    .other-flex-container {
+      background: linear-gradient(70.88deg, ${getTeamColor2(playerTeam)} 7.16%, ${getTeamColor(playerTeam)} 15.16%,lightgrey 15.89%);
+      color: white;
+      min-width: 28rem;
+      min-height: 72px;
+      justify-content: center;
+      display: flex;
+      margin-bottom: 3rem;
+      cursor: pointer;
+      border-radius: 8px;
+      box-shadow: 0 10px 16px 0 rgb(0 0 0 / 20%), 0 6px 20px 0 rgb(0 0 0 / 19%)
+    }
     
-    .accordian-title {
+    .accordion-title {
       display: flex;
       flex-direction: row;
       justify-content: space-between;
       cursor: pointer;
     }
     
-    .accordian-title,
-    .accordian-content {
+    .accordion-title,
+    .accordion-content {
       padding: 1rem;
     }
     
-    .accordian-content {
+    .accordion-content {
       background-color: #39b9d2;
     }
   
@@ -646,11 +705,11 @@ const CardPopUp = ({name, rating, sellNowPrice, buyNowPrice, moneyMake, playerTe
       min-height: 2rem;
     }
 
-    .accordian-arrow {
+    .accordion-arrow {
       display: none;
     }
   
-    .accordian-arrow-2 {
+    .accordion-arrow-2 {
       display: none;
     }
     
@@ -736,26 +795,8 @@ const CardPopUp = ({name, rating, sellNowPrice, buyNowPrice, moneyMake, playerTe
       justify-content: center;
     }
   
-    .overlay-text {
-      display: flex;
-    }
-  
     .equation-underline {
       text-decoration: underline;
-    }
-  
-    .info-icon {
-      color: white;
-      border: 2px solid white;
-      border-radius: 60%;
-      width: 22px;
-      height: 22px;
-      background-color: black;
-      cursor: pointer;
-      position: absolute;
-      margin-left: 9.8rem;
-      font-weight: bold;
-      z-index: 1;
     }
   
     .buy-now {
@@ -776,13 +817,14 @@ const CardPopUp = ({name, rating, sellNowPrice, buyNowPrice, moneyMake, playerTe
     }
   
     .background-box {
+      padding-top: 30px;
       margin-top: 3rem;
       max-height: 22rem;
       max-width: 15rem;
       box-shadow: 0px 0px 25px 15px ${getTeamColor2(playerTeam)};
       border: 3px outset ${getTeamColor(playerTeam)};
       padding: 15px;
-      background: white;
+      background: lightgrey;
       background-clip: padding-box;
       border-radius: 15px;
     }
@@ -823,13 +865,6 @@ const CardPopUp = ({name, rating, sellNowPrice, buyNowPrice, moneyMake, playerTe
       text-align: center;
       border-radius: 20px;
     }
-  
-    .card-info-spacing {
-          font-weight: bold;
-          font-size: 1.5rem;
-          text-align: center;
-          justify-content: center;
-    } 
     
       .making-info-spacing {
           margin-top: 1.5rem;
@@ -1031,4 +1066,4 @@ const CardPopUp = ({name, rating, sellNowPrice, buyNowPrice, moneyMake, playerTe
 );
 };
 
-export default CardPopUp;
+export default Accordion;
