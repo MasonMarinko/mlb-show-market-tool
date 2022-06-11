@@ -44,8 +44,6 @@ export default function Home({ profitOnly }) {
   const [cardColor, setPlayerColor] = useState();
   const [isHelpOpen, setIsHelpOpen] = useState(false);
   const [noBuyNow, setNoBuyNow] = useState(false);
-  const [isMobile, setIsMobile] = useState(false);
-
   
   const breakEven = (bestBuyPrice) => {
     return bestBuyPrice/(.90)
@@ -63,11 +61,14 @@ export default function Home({ profitOnly }) {
 
   const onFieldChange = (e) => {
     if (e.target.name === "Buy Now Price") {
-      setBuyNowPrice({
-        ...buyNowPrice,
-        [e.target.name]: e.target.value
-      })
-    } else {
+      if (e.target.value === "") {
+        setBuyNowPrice({"Buy Now Price": "0"})
+      } else {
+          setBuyNowPrice({
+            ...buyNowPrice,
+            [e.target.name]: e.target.value
+          })
+   }} else {
       setSellNowPrice({
         ...sellNowPrice,
         [e.target.name]: e.target.value
@@ -78,22 +79,24 @@ export default function Home({ profitOnly }) {
   const onSubmit = (e) => {
     e.preventDefault(e);
     if (sellNowPrice["Sell Now Price"] === "0") {
+      setNoBuyNow(true)
+      setBuyNowPrice({ "Buy Now Price": "0" })
       alert("Sell Now Price is REQUIRED")
       return
     } else if (buyNowPrice["Buy Now Price"] === "0") {
-      setForm({
-        "Sell Now Price": sellNowPrice["Sell Now Price"],
-        "Buy Now Price": buyNowPrice["Buy Now Price"]
-      })  
       setNoBuyNow(true)
       setAreStatsOpen(true)
+      setForm({
+        "Sell Now Price": sellNowPrice["Sell Now Price"],
+        "Buy Now Price": "0"
+      })  
     } else {
+      setNoBuyNow(false)
+      setAreStatsOpen(true)
       setForm({
         "Buy Now Price": buyNowPrice["Buy Now Price"],
         "Sell Now Price": sellNowPrice["Sell Now Price"]
       })
-      setNoBuyNow(false)
-      setAreStatsOpen(true)
     }
   }
 
@@ -166,12 +169,12 @@ export default function Home({ profitOnly }) {
             </div>
             <div className="entered-values-container">
 
-            {!noBuyNow && <div className="stat-border left-items">
+            {noBuyNow === false && <div className="stat-border left-items">
               <h1 className="entered-titles title-padding">{Math.sign(buySellDifference) === -1 ? "Expected Loss" : "Expected Profit"}</h1>
               <div className="border-bottom"></div>
               <p className="result-text">{Math.sign(buySellDifference) === -1 ? "Losing: $" + Math.abs(buySellDifference).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',') : "Making: $" + Math.abs(buySellDifference).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</p>
             </div>}
-            {noBuyNow !== true && 
+            {noBuyNow === false && 
             <div className="stat-border background-color">
             <h1 className="entered-titles title-padding">Recommendation</h1>
             <div className="border-bottom"></div>
