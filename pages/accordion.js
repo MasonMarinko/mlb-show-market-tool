@@ -263,12 +263,14 @@ const Accordion = ({name, rating, sellNowPrice, buyNowPrice, moneyMake, playerTe
   .other-flex-container {
     background: lightgray;
     color: white;
+    -webkit-tap-highlight-color: transparent;
     min-width: 28rem;
     min-height: 72px;
     justify-content: center;
     display: flex;
     margin-bottom: 3rem;
     cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
     border-radius: 8px;
     box-shadow: 0 10px 16px 0 rgb(0 0 0 / 20%), 0 6px 20px 0 rgb(0 0 0 / 19%)
   }
@@ -417,6 +419,7 @@ const Accordion = ({name, rating, sellNowPrice, buyNowPrice, moneyMake, playerTe
   
   .accordion {
     display: flex;
+    justify-content: center;
   }
 
   .accordion-arrow {
@@ -620,19 +623,6 @@ const Accordion = ({name, rating, sellNowPrice, buyNowPrice, moneyMake, playerTe
         padding-right: 1rem;
     }
   
-  .update-info-title {
-    padding-top: 75px;
-  }
-  
-  .startOver-button-container {
-    min-width: 100%;
-  }
-  
-  .startOver-button {
-    margin-top: 2rem;
-    padding: 10px 50px 10px 50px;
-  }
-  
   .parentheses-text {
     font-size: 1.2rem;
     margin-top: 0px;
@@ -665,18 +655,8 @@ const Accordion = ({name, rating, sellNowPrice, buyNowPrice, moneyMake, playerTe
       text-align: center;
       margin: 2rem 0 4rem 0;
     }
-
-    .other-flex-container {
-      background: linear-gradient(70.88deg, ${getTeamColor2(playerTeam)} 7.16%, ${getTeamColor(playerTeam)} 15.16%,lightgrey 15.89%);
-      color: white;
-      min-width: 28rem;
-      min-height: 72px;
-      justify-content: center;
-      display: flex;
-      margin-bottom: 3rem;
-      cursor: pointer;
-      border-radius: 8px;
-      box-shadow: 0 10px 16px 0 rgb(0 0 0 / 20%), 0 6px 20px 0 rgb(0 0 0 / 19%)
+    .flex-container {
+      -webkit-tap-highlight-color: transparent;
     }
     
     .accordion-title {
@@ -1018,19 +998,6 @@ const Accordion = ({name, rating, sellNowPrice, buyNowPrice, moneyMake, playerTe
       .input-labels {
           padding-right: 1rem;
       }
-    
-    .update-info-title {
-      padding-top: 75px;
-    }
-    
-    .startOver-button-container {
-      min-width: 100%;
-    }
-    
-    .startOver-button {
-      margin-top: 2rem;
-      padding: 10px 50px 10px 50px;
-    }
     
     .parentheses-text {
       font-size: 1.2rem;
