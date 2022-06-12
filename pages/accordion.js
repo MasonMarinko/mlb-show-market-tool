@@ -576,13 +576,6 @@ const Accordion = ({name, rating, sellNowPrice, buyNowPrice, moneyMake, playerTe
     color: red;
   }
   
-  .refresh-button-container {
-    display: flex;
-    justify-content: space-around;
-    padding: 0 0 2.5rem 0;
-    margin: 0;
-  }
-  
   .title-padding-top {
     padding-top: 3rem;
     margin: 0px;
@@ -604,11 +597,6 @@ const Accordion = ({name, rating, sellNowPrice, buyNowPrice, moneyMake, playerTe
         margin: 0;
         padding-right:4rem;
     }
-  
-  .refresh-button {
-    margin-top:0;
-    padding: 10px 40px 10px 40px;
-  }
   
   .form-styling {
     padding-top: 15px;
@@ -952,13 +940,6 @@ const Accordion = ({name, rating, sellNowPrice, buyNowPrice, moneyMake, playerTe
       color: red;
     }
     
-    .refresh-button-container {
-      display: flex;
-      justify-content: space-around;
-      padding: 0 0 2.5rem 0;
-      margin: 0;
-    }
-    
     .title-padding-top {
       padding-top: 3rem;
       margin: 0px;
@@ -980,11 +961,6 @@ const Accordion = ({name, rating, sellNowPrice, buyNowPrice, moneyMake, playerTe
           margin: 0;
           padding-right:4rem;
       }
-    
-    .refresh-button {
-      margin-top:0;
-      padding: 10px 40px 10px 40px;
-    }
     
     .form-styling {
       padding-top: 15px;

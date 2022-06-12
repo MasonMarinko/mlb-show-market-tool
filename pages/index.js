@@ -4,7 +4,7 @@ import Accordion from './accordion';
 
 export const getServerSideProps = async () => {
   const promises = []
-  for (let i = 1; i < 20; i++) {
+  for (let i = 1; i < 72; i++) {
     const p = new Promise((resolve, reject) => {
       fetch(`https://mlb22.theshow.com/apis/listings.json?&page=${i}`)
         .then(res => res.json())
@@ -157,9 +157,11 @@ export default function Home({ profitOnly }) {
       <div className="flex">
         <div className="upper-outer-container">
           <div className="upper-inner-container">
+            <div className="flip-img-text-container">
+          <img className="mobile-calc-heading" src="https://i.imgur.com/b2rFbLh.png"></img>
         <h1 className="main-title">
-        <img src="https://i.imgur.com/b2rFbLh.png"></img><span className="flip-calc-title">Flip Calculator</span> <div className = "icon-container"><button type="button" onClick={e=>toggleHelpText(e)} className="info-icon">!</button></div></h1>
-
+        <span className="flip-calc-title">Flip Calculator</span> <div className = "icon-container"><button type="button" onClick={e=>toggleHelpText(e)} className="info-icon">!</button></div></h1>
+        </div>
         {isHelpOpen && <div onClick={e => toggleHelpText(e)} className="help-container">
           <div className="help-text">In MLB The Show, you can submit Buy and Sell Orders. <br/><br/> When you see {`"`}Buy Now{`"`}, you{`'`}re actually seeing the lowest available price that someone has posted as a {`"`}Sell Order{`"`}. <br/><br/>Alternately, if you see {`"`}Sell Now{`"`}, you{`'`}re
           looking at the cheapest amount someone is posting they will pay on their {`"`}Buy Order{`"`}. <br/><br/> For more information, checkout <a href="https://www.youtube.com/watch?v=ZfSel0u1Ws0">this video.</a></div>
@@ -243,6 +245,7 @@ export default function Home({ profitOnly }) {
         </div>
         </div>
         <div className="border-top flip-title-container">
+        <img className="mobile-flip-heading" src="https://i.imgur.com/b2rFbLh.png"></img>
         <h1 className="main-title-flip"><a>Money Makers</a></h1>
         <h3 className="more-info">Click cards below for more info</h3>
         </div>
@@ -279,6 +282,12 @@ export default function Home({ profitOnly }) {
         min-height: 4rem;
         border-radius: 10px;
       }
+      .mobile-calc-heading {
+          padding-bottom: 1rem;
+      }
+      .mobile-flip-heading {
+        display: none;
+      }
       .submit-button:hover {
         background-color: grey;
       }
@@ -288,13 +297,16 @@ export default function Home({ profitOnly }) {
       .upper-outer-container {
         display: flex;
         min-width: 100%;
-        justify-content: center;
-        background-color: #2c4064;
+        justify-content: space-around;
+        background-color: #b91d1e;
         padding-bottom: 5rem;
         margin-bottom: -20px;
+        background-image: url("https://i.imgur.com/D7avbDZ.jpg");
+        background-position-x: -1066px;
+        background-position-y: -90px;
       }
       .upper-inner-container {
-        max-width: 500px;
+        min-width: 500px;
       }
       .flex {
         display: flex;
@@ -315,8 +327,8 @@ export default function Home({ profitOnly }) {
         justify-content: center;
         align-items: center;
         position: absolute;
-        margin-top: 12rem;
-        margin-right: 31rem;
+        margin-top: -1.2rem;
+        margin-right: -.3rem;
       }
       .icon-container {
         display: flex;
@@ -326,11 +338,11 @@ export default function Home({ profitOnly }) {
 
       .flip-calc-title {
         position: absolute;
-        min-width: 100%;
-        font-size: 53px;
-        margin-top: 7.9rem;
-        margin-right: 7.7rem;
-        color: green;
+        min-width: 32rem;
+        font-size: 59px;
+        color: black;
+        margin-top: -5.6rem;
+        margin-right: 5.9rem;
       }
       
       .losing-container {
@@ -350,13 +362,9 @@ export default function Home({ profitOnly }) {
         min-width: 15rem;
           min-height: 4rem;   
           font-size: 21px;
-          background-color: lightgrey;
+          background-color: darkgrey;
           border-radius: 10px;
       }
-      .startOver-button:hover {
-        background-color: darkgrey;
-      }
-
       .result-text {
         font-size: 1.5rem;
         font-weight: bold;
@@ -443,9 +451,6 @@ export default function Home({ profitOnly }) {
         display: flex;
         padding-bottom: 1rem;
       }
-      img {
-        padding-bottom: 1rem;
-      }
 
       .border-top {
         border-top: 4px double white;
@@ -503,6 +508,53 @@ export default function Home({ profitOnly }) {
       justify-content: space-around;
     }
       @media screen and (min-width: 690px) {
+        .info-icon {
+          margin-top: 4.3rem;
+          margin-right: 31rem;
+        }
+        .flip-img-text-container {
+          min-width: 500px;
+        }
+        .main-title-flip {
+          position: absolute;
+          color: green;
+          font-size: 58px;
+          margin-right: 5.9rem;
+          margin-top: 5.8rem;
+        }
+        .main-title {
+          color: white;
+          margin-top: 1rem;
+          font-size: 4rem;
+          display: flex;
+          padding-bottom: 1rem;
+        }
+        .mobile-flip-heading {
+          display: block;
+        }
+        .mobile-calc-heading {
+          padding-bottom: 1rem;
+          display: none;
+      }
+        .upper-outer-container {
+          display: flex;
+          background-color: #b91d1e;
+          padding-bottom: 5rem;
+          margin-bottom: -20px;
+          background-image: url("https://i.imgur.com/D7avbDZ.jpg");
+          image-width: 100%;
+          background-repeat: no-repeat;
+          justify-content: flex-end;
+          background-size: cover;
+          background-position-x: 0;
+          background-position-y: -3rem;
+        }
+        .upper-inner-container {
+          min-width: 500px;
+        }
+        .image-header {
+          position: absolute;
+        }
         .input-contain {
           display: flex;
           min-height: 2rem;
@@ -513,13 +565,22 @@ export default function Home({ profitOnly }) {
           display: flex;
           flex-wrap: wrap;
           justify-content: center;
-          margin-bottom: 5rem;
+          margin-bottom: 7rem;
+          padding-top: 5rem;
         }
         .main-title-flip {
           display: flex;
         }
         .more-info {
-          display: flex;
+          position: absolute;
+          margin-top: 12rem;
+
+        }
+        .flip-calc-title {
+          position: unset;
+          margin-top: 0;
+          margin-right: 0;
+          font-size: 63px;
         }
         
         .inputs-style {
@@ -582,9 +643,6 @@ export default function Home({ profitOnly }) {
      @media screen and (min-width: 690px) {
         #root {
           justify-content: center;
-        }
-        .flip-calc-title {
-          font-size: 55px;
         }
      }
 
