@@ -275,10 +275,13 @@ const Accordion = ({name, rating, sellNowPrice, buyNowPrice, moneyMake, playerTe
     box-shadow: 0 10px 16px 0 rgb(0 0 0 / 20%), 0 6px 20px 0 rgb(0 0 0 / 19%)
   }
 
-  .other-flex-container:hover {
+  .other-flex-container:not(:hover) {
     background: linear-gradient(70.88deg, ${getTeamColor2(playerTeam)} 7.16%, ${getTeamColor(playerTeam)} 15.16%,lightgrey 15.89%);
     background-size: 125%;
     animation: closed-gradient 1s forwards;
+  }
+
+  .other-flex-container:hover {
     box-shadow: rgba(80, 63, 205, 0.5) 0 1px 30px;
   }
 
@@ -294,7 +297,7 @@ const Accordion = ({name, rating, sellNowPrice, buyNowPrice, moneyMake, playerTe
     }
   }
 
-  .flex-container:hover {
+  .flex-container {
     background: linear-gradient(70.88deg, ${getTeamColor2(playerTeam)} 16.16%, ${getTeamColor(playerTeam)} 30.16%,lightgrey 15.89%);
     background-size: 158%;
     animation: open-gradient 1s forwards;
@@ -725,7 +728,7 @@ const Accordion = ({name, rating, sellNowPrice, buyNowPrice, moneyMake, playerTe
       height: 100%;
       display: flex;
       justify-content: center;
-      align-items: center;
+      align-items: center;;
     }
   
     .equation-title {    
@@ -789,7 +792,7 @@ const Accordion = ({name, rating, sellNowPrice, buyNowPrice, moneyMake, playerTe
       margin-top: 3rem;
       max-height: 22rem;
       max-width: 15rem;
-      box-shadow: 0px 0px 25px 15px ${getTeamColor2(playerTeam)};
+      box-shadow: 0px 0px 45px 5px ${getTeamColor2(playerTeam)};
       border: 3px outset ${getTeamColor(playerTeam)};
       padding: 15px;
       background: lightgrey;
@@ -807,6 +810,22 @@ const Accordion = ({name, rating, sellNowPrice, buyNowPrice, moneyMake, playerTe
       display: flex;
       justify-content: center;
       align-items: center;
+      opacity: 97%;
+      background: linear-gradient(-45deg,  ${getTeamColor2(playerTeam)} 20%,${getTeamColor(playerTeam)} 40%, ${getTeamColor2(playerTeam)} 80%);      
+      background-size: 400% 400%;
+      animation: mobile-gradient 10s infinite;
+    }
+
+    @keyframes mobile-gradient {
+      0% {
+        background-position: 0% 50%;
+      }
+      50% {
+        background-position: 100% 50%;
+      }
+      100% {
+        background-position: 0% 50%;
+      }
     }
     
     .form-styling {

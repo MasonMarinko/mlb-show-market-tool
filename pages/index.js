@@ -158,9 +158,10 @@ export default function Home({ profitOnly }) {
         <div className="upper-outer-container">
           <div className="upper-inner-container">
             <div className="flip-img-text-container">
-          <img className="mobile-calc-heading" src="https://i.imgur.com/b2rFbLh.png"></img>
+          <img className="mobile-calc-heading" src="https://i.imgur.com/58p3EKn.png"></img>
         <h1 className="main-title">
-        <span className="flip-calc-title">Flip Calculator</span> <div className = "icon-container"><button type="button" onClick={e=>toggleHelpText(e)} className="info-icon">!</button></div></h1>
+        <span className="flip-calc-title">Flip Calculator</span> <div className = "icon-container"></div></h1>
+        <button type="button" onClick={e=>toggleHelpText(e)} className="info-icon">!</button>
         </div>
         {isHelpOpen && <div onClick={e => toggleHelpText(e)} className="help-container">
           <div className="help-text">In MLB The Show, you can submit Buy and Sell Orders. <br/><br/> When you see {`"`}Buy Now{`"`}, you{`'`}re actually seeing the lowest available price that someone has posted as a {`"`}Sell Order{`"`}. <br/><br/>Alternately, if you see {`"`}Sell Now{`"`}, you{`'`}re
@@ -245,7 +246,7 @@ export default function Home({ profitOnly }) {
         </div>
         </div>
         <div className="border-top flip-title-container">
-        <img className="mobile-flip-heading" src="https://i.imgur.com/b2rFbLh.png"></img>
+        <img className="mobile-flip-heading" src="https://i.imgur.com/58p3EKn.png"></img>
         <h1 className="main-title-flip"><a>Money Makers</a></h1>
         <h3 className="more-info">Click cards below for more info</h3>
         </div>
@@ -266,9 +267,21 @@ export default function Home({ profitOnly }) {
       </div>
       <style jsx global>{`
         body {
-          margin: 0;
+          margin:0;
           background-color: #141922;
         }
+       @media screen and (min-width: 1550px) {
+        html {
+          display: flex;
+          justify-content: center;
+        }
+        body {
+          margin: 0;
+          background-color: #141922;
+          display: flex;
+          width: 70%;
+        }
+      }
       `}</style>
       <style jsx>{`
       #root {
@@ -283,7 +296,7 @@ export default function Home({ profitOnly }) {
         border-radius: 10px;
       }
       .mobile-calc-heading {
-          padding-bottom: 1rem;
+          padding-bottom: 0;
       }
       .mobile-flip-heading {
         display: none;
@@ -305,8 +318,17 @@ export default function Home({ profitOnly }) {
         background-position-x: -1066px;
         background-position-y: -90px;
       }
-      .upper-inner-container {
+      .flip-img-text-container {
         min-width: 500px;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        padding-bottom: 1rem;
+      }
+      .upper-inner-container {
+        max-width: 32rem;
+        padding-top: 0;
+        padding-right: 5%;
       }
       .flex {
         display: flex;
@@ -324,11 +346,6 @@ export default function Home({ profitOnly }) {
         cursor: pointer;
         font-weight: bold;
         font-size: 1rem;
-        justify-content: center;
-        align-items: center;
-        position: absolute;
-        margin-top: -1.2rem;
-        margin-right: -.3rem;
       }
       .icon-container {
         display: flex;
@@ -337,12 +354,11 @@ export default function Home({ profitOnly }) {
       }
 
       .flip-calc-title {
-        position: absolute;
+        display: flex;
         min-width: 32rem;
         font-size: 59px;
+        justify-content: center;
         color: black;
-        margin-top: -5.6rem;
-        margin-right: 5.9rem;
       }
       
       .losing-container {
@@ -417,10 +433,10 @@ export default function Home({ profitOnly }) {
         justify-content: center;
       }
       .stats-container {
-        justify-content: center;
-        align-items: center;
+        width: 32rem;
         display: flex;
         flex-wrap: wrap;
+        justify-content: center;
       }
       .stat-border {
         border: 1px solid black;
@@ -445,11 +461,11 @@ export default function Home({ profitOnly }) {
         min-width: 100%;
         justify-content: center;
         text-align: center;
-        margin-top: 1rem;
-        margin-bottom: ${areStatsOpen ? "0": "1rem"};
+        margin-top: -.7rem;
+        margin-bottom: 0;
         font-size: 4rem;
         display: flex;
-        padding-bottom: 1rem;
+        padding-bottom: 0;
       }
 
       .border-top {
@@ -458,10 +474,8 @@ export default function Home({ profitOnly }) {
       }
 
       .help-text {
-        position: absolute;
         background-color: white;
         width: 23rem;
-        margin-bottom: 1.5rem;
         border-radius: 15px;
         padding: .5rem;
         border: 2px solid black;
@@ -507,10 +521,9 @@ export default function Home({ profitOnly }) {
       display: flex;
       justify-content: space-around;
     }
-      @media screen and (min-width: 690px) {
-        .info-icon {
-          margin-top: 4.3rem;
-          margin-right: 31rem;
+      @media screen and (min-width: 1000px) {
+        .upper-inner-container {
+          padding-right: 2%;
         }
         .flip-img-text-container {
           min-width: 500px;
@@ -518,8 +531,8 @@ export default function Home({ profitOnly }) {
         .main-title-flip {
           position: absolute;
           color: green;
+          justify-content: center;
           font-size: 58px;
-          margin-right: 5.9rem;
           margin-top: 5.8rem;
         }
         .main-title {
@@ -550,7 +563,7 @@ export default function Home({ profitOnly }) {
           background-position-y: -3rem;
         }
         .upper-inner-container {
-          min-width: 500px;
+          padding-top: 4rem;
         }
         .image-header {
           position: absolute;
@@ -565,8 +578,9 @@ export default function Home({ profitOnly }) {
           display: flex;
           flex-wrap: wrap;
           justify-content: center;
-          margin-bottom: 7rem;
+          padding-bottom: 10rem;
           padding-top: 5rem;
+          border-bottom: 4px double white;
         }
         .main-title-flip {
           display: flex;
@@ -615,7 +629,7 @@ export default function Home({ profitOnly }) {
         }
 
         .stats-container {
-              max-width: 41rem;
+              max-width: 41rem; 
         }
 
         .purchase-input-title {
