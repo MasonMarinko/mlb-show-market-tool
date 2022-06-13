@@ -328,7 +328,6 @@ export default function Home({ profitOnly }) {
       .upper-inner-container {
         max-width: 32rem;
         padding-top: 0;
-        padding-right: 5%;
       }
       .flex {
         display: flex;
